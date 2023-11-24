@@ -1,14 +1,9 @@
 import "~/app/_styles/globals.css";
 
-import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
-
 import { TRPCReactProvider } from "~/trpc/react";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+import { shippori } from "../_styles/fonts";
+import { Header } from "../_components/header";
 
 export const metadata = {
   title: "Create T3 App",
@@ -23,8 +18,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
+      <body
+        className={`font-sans flex min-h-screen flex-col ${shippori.className}`}
+      >
         <TRPCReactProvider cookies={cookies().toString()}>
+          <Header />
           {children}
         </TRPCReactProvider>
       </body>

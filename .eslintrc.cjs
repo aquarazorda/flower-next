@@ -4,7 +4,7 @@ const config = {
   parserOptions: {
     project: true,
   },
-  plugins: ["@typescript-eslint"],
+  plugins: ["@typescript-eslint", "plugin:tailwindcss/recommended"],
   extends: [
     "plugin:@next/next/recommended",
     "plugin:@typescript-eslint/recommended-type-checked",
