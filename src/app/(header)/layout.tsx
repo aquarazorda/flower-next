@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { TRPCReactProvider } from "~/trpc/react";
 import { shippori } from "../_styles/fonts";
 import { Header } from "../_components/header";
+import Footer from "../_components/footer";
 
 export const metadata = {
   title: "Create T3 App",
@@ -24,6 +25,7 @@ export default function RootLayout({
         <TRPCReactProvider cookies={cookies().toString()}>
           <Header />
           {children}
+          <Footer />
         </TRPCReactProvider>
       </body>
     </html>

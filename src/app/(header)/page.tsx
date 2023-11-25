@@ -3,6 +3,7 @@ import HomeMainBox from "../_components/home/home-main-box";
 import RoomsCarousel from "../_components/home/rooms-carousel";
 import SuitesCarousel from "../_components/home/suites-carousel";
 import { Metadata } from "next";
+import Restaurant from "../_components/home/restaurant";
 
 export const metadata: Metadata = {
   title: "Hotel Flower",
@@ -36,6 +37,7 @@ export default async function Home() {
       </div>
       <RoomsCarousel rooms={data.rooms} />
       <SuitesCarousel suites={data.suites.slice(0, 4)} />
+      <Restaurant />
     </main>
   );
 }
