@@ -28,7 +28,7 @@ export default async function Home() {
           into the heart of Tbilisi begins.
         </span>
       </div>
-      <RoomsCarousel rooms={data.rooms} />
+      <RoomsCarousel rooms={data.rooms.slice(0, 7)} />
       <SuitesCarousel suites={data.suites.slice(0, 4)} />
       <Restaurant />
     </main>

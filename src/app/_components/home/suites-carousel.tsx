@@ -18,19 +18,20 @@ export default function SuitesCarousel({ suites }: Props) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     axis: isMobile ? "x" : "y",
   });
-  const [slidesInView, setSlidesInView] = useState([0, 1]);
   const [currSlideIndex, setCurrSlideIndex] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
-    emblaApi?.on("slidesInView", ({ slidesInView }) =>
-      setSlidesInView(slidesInView()),
-    );
-
     emblaApi?.on("select", ({ selectedScrollSnap }) =>
       setCurrSlideIndex(selectedScrollSnap()),
     );
   }, [emblaApi]);
+
+  useEffect(() => {
+    emblaApi?.reInit({
+      axis: isMobile ? "x" : "y",
+    });
+  }, [emblaApi, isMobile]);
 
   return (
     <div className="flex flex-col lg:mt-28 lg:px-32">
@@ -48,7 +49,9 @@ export default function SuitesCarousel({ suites }: Props) {
                 style={{ flex: "0 0 100%" }}
                 key={room.roomId}
               >
-                {slidesInView.indexOf(idx) > -1 && (
+                {currSlideIndex === idx ||
+                currSlideIndex - 1 === idx ||
+                currSlideIndex + 1 === idx ? (
                   <Image
                     alt={room.name}
                     fill={true}
@@ -59,7 +62,7 @@ export default function SuitesCarousel({ suites }: Props) {
                     }-desktop.webp`}
                     className="block h-full w-full object-cover lg:rounded-md"
                   />
-                )}
+                ) : null}
               </Link>
             ))}
           </div>
