@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useIsMobile } from "~/app/_hooks/useIsMobile";
 import { RouterOutputs } from "~/trpc/shared";
 import LazyImage from "../lazy-image";
+import Link from "next/link";
 
 type Props = {
   rooms: RouterOutputs["room"]["get"];
@@ -27,7 +28,9 @@ export default function RoomsCarousel({ rooms }: Props) {
       >
         <div className="embla__container flex lg:ml-28">
           {rooms.map((room, idx) => (
-            <div
+            <Link
+              href={"/book/" + room.roomId}
+              prefetch={false}
               key={room.id}
               style={{ aspectRatio: isMobile ? "9.4/10" : "" }}
               className="embla__slide relative mr-2 h-32 w-[123px] text-sm text-white lg:mr-8 lg:aspect-square lg:h-[264px] lg:w-fit"
@@ -53,7 +56,7 @@ export default function RoomsCarousel({ rooms }: Props) {
                   fill={true}
                 />
               )}
-            </div>
+            </Link>
           ))}
         </div>
       </div>

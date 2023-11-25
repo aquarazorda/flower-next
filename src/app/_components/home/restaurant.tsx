@@ -11,7 +11,7 @@ export default function Restaurant() {
           src="/images/home/restaurant-desktop.webp"
           alt="Restaurant banner"
           fill={true}
-          className="h-full  w-full rounded-md object-cover"
+          className="!relative rounded-md object-cover"
           loading="lazy"
         />
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export const useIsMobile = () => {
   const [width, setWidth] = useState<number>(1024);
@@ -17,5 +17,5 @@ export const useIsMobile = () => {
     };
   }, []);
 
-  return width < 1024;
+  return useMemo(() => width < 1024, [width]);
 };

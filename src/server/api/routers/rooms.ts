@@ -32,4 +32,36 @@ export const roomRouter = createTRPCRouter({
         },
       });
     }),
+  getRoom: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    const data = await ctx.db.room.findUnique({
+      where: {
+        roomId: Number(input),
+      },
+      select: {
+        id: true,
+        name: true,
+        roomId: true,
+        prices: {
+          select: {
+            list: true,
+          },
+        },
+        blockedDate: {
+          select: {
+            dates: true,
+          },
+        },
+        info: {
+          select: {
+            description: true,
+            extraPerson: true,
+            persons: true,
+            pictures: true,
+          },
+        },
+      },
+    });
+
+    return data;
+  }),
 });

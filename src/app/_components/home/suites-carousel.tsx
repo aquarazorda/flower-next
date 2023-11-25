@@ -7,6 +7,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import { useIsMobile } from "~/app/_hooks/useIsMobile";
 import { useEffect, useState } from "react";
 import SliderDots from "../slider-dots";
+import Link from "next/link";
 
 type Props = {
   suites: RouterOutputs["room"]["get"];
@@ -40,7 +41,9 @@ export default function SuitesCarousel({ suites }: Props) {
         <div ref={emblaRef} className="embla overflow-hidden lg:w-1/2">
           <div className="embla__container relative flex h-64 w-full cursor-pointer lg:h-[70vh] lg:flex-col">
             {suites.map((room, idx) => (
-              <div
+              <Link
+                href={"/book/" + room.roomId}
+                prefetch={false}
                 className="embla__slide relative block w-full"
                 style={{ flex: "0 0 100%" }}
                 key={room.roomId}
@@ -54,11 +57,10 @@ export default function SuitesCarousel({ suites }: Props) {
                       // @ts-ignore
                       room.info?.pictures?.[0] || 0
                     }-desktop.webp`}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="block h-full w-full object-cover lg:rounded-md"
                   />
                 )}
-              </div>
+              </Link>
             ))}
           </div>
         </div>
