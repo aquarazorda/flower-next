@@ -1,0 +1,35 @@
+import { z } from "zod";
+import { createTRPCRouter, publicProcedure } from "../trpc";
+
+export const roomRouter = createTRPCRouter({
+  get: publicProcedure
+    .input(
+      z
+        .object({
+          type: z.union([z.literal("suite"), z.literal("room")]).optional(),
+        })
+        .optional(),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.room.findMany({
+        select: {
+          id: true,
+          type: true,
+          blockedDate: true,
+          info: true,
+          name: true,
+          prices: true,
+          roomId: true,
+          order: true,
+        },
+        orderBy: {
+          order: "asc",
+        },
+        where: {
+          type: {
+            equals: input?.type,
+          },
+        },
+      });
+    }),
+});
