@@ -1,10 +1,10 @@
 "use client";
 
-import { RouterOutputs } from "~/trpc/shared";
 import useEmblaCarousel from "embla-carousel-react";
-import { useIsMobile } from "~/app/_hooks/useIsMobile";
-import LazyImage from "../lazy-image";
 import Image from "next/image";
+import { useIsMobile } from "~/app/_hooks/useIsMobile";
+import { RouterOutputs } from "~/trpc/shared";
+import LazyImage from "../lazy-image";
 
 type Props = {
   rooms: RouterOutputs["room"]["get"];
@@ -35,6 +35,7 @@ export default function RoomsCarousel({ rooms }: Props) {
               {idx < 5 ? (
                 <Image
                   src={`/images/${room.roomId}/${
+                    // @ts-ignore
                     room.info?.pictures?.[0] || 0
                   }-desktop.webp`}
                   className="rounded-lg object-cover"
@@ -44,6 +45,7 @@ export default function RoomsCarousel({ rooms }: Props) {
               ) : (
                 <LazyImage
                   src={`/images/${room.roomId}/${
+                    // @ts-ignore
                     room.info?.pictures?.[0] || 0
                   }-desktop.webp`}
                   className="rounded-lg object-cover"

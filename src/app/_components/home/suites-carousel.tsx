@@ -51,6 +51,7 @@ export default function SuitesCarousel({ suites }: Props) {
                     fill={true}
                     onClick={() => router.push("/suites/" + room.roomId)}
                     src={`/images/${room.roomId}/${
+                      // @ts-ignore
                       room.info?.pictures?.[0] || 0
                     }-desktop.webp`}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

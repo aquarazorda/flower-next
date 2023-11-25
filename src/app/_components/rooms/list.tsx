@@ -18,6 +18,7 @@ export default function RoomsList({ rooms }: Props) {
                 alt={room.name}
                 fill={true}
                 src={`/images/${room.roomId}/${
+                  // @ts-ignore
                   room.info?.pictures?.[0] || 0
                 }-desktop.webp`}
                 // onClick={() => navigate(`./${room.roomId}`)}

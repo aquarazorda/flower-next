@@ -11,7 +11,7 @@ export default function SliderDots(props: Props) {
     <>
       {Array.from(Array(props.count).keys()).map((room, idx) => (
         <div
-          key={`${room.roomId}-${idx}-dot`}
+          key={`${idx}-dot`}
           className={cn(
             "h-2 w-2 cursor-pointer rounded-full hover:bg-neutral-400",
             idx === props.current && "bg-neutral-400",
