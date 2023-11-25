@@ -30,7 +30,7 @@ export default function RoomsCarousel({ rooms }: Props) {
             <div
               key={room.id}
               style={{ aspectRatio: isMobile ? "9.4/10" : "" }}
-              className="embla__slide relative mr-2 h-32 w-[123px] text-sm text-white lg:mr-8 lg:aspect-square lg:aspect-square lg:h-[264px] lg:w-fit"
+              className="embla__slide relative mr-2 h-32 w-[123px] text-sm text-white lg:mr-8 lg:aspect-square lg:h-[264px] lg:w-fit"
             >
               {idx < 5 ? (
                 <Image

@@ -1,6 +1,14 @@
 import { api } from "~/trpc/server";
 import HomeMainBox from "../_components/home/home-main-box";
 import RoomsCarousel from "../_components/home/rooms-carousel";
+import SuitesCarousel from "../_components/home/suites-carousel";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Hotel Flower",
+  description:
+    "Hotel Flower - your gateway to Tbilisi's vibrant spirit. Uncover Georgian charm encapsulated in our modern, luxurious setting. Here, breathtaking city views meet unparalleled comfort. Your journey into the heart of Tbilisi begins.",
+};
 
 export default async function Home() {
   const res = await api.room.get.query();
@@ -27,6 +35,7 @@ export default async function Home() {
         </span>
       </div>
       <RoomsCarousel rooms={data.rooms} />
+      <SuitesCarousel suites={data.suites.slice(0, 4)} />
     </main>
   );
 }
