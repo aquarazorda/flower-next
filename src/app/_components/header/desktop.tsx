@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useMemo } from "react";
 import useWindowScrollPosition from "~/app/_hooks/useWindowScrollPosition";
-import { cn } from "~/app/_lib/_utils";
+import { cn } from "~/app/_lib/utils";
 import headerNavItems from "./headerNavItems";
 
 export default function DesktopHeader() {

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Instagram from "~/app/_assets/icons/Instagram";
 import Phone from "~/app/_assets/icons/Phone";
-import { cn } from "~/app/_lib/_utils";
+import { cn } from "~/app/_lib/utils";
 import { inter } from "~/app/_styles/fonts";
 
 export default function Desktop() {

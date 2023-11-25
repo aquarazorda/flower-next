@@ -1,10 +1,10 @@
 import { api } from "~/trpc/server";
-import Image from "next/image";
 import RoomSlider from "./slider";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { CancelRounded } from "~/app/_assets/icons/CancelRounded";
 import { CheckRounded } from "~/app/_assets/icons/CheckRounded";
+import BookingCalendar from "./calendar";
 
 type Props = {
   params: { id: string };
@@ -111,36 +111,10 @@ export default async function RoomItemPage({ params }: Props) {
               Booking for this room is not available.
             </div>
           ) : (
-            <div className="flex h-full flex-col justify-center">
-              {/* <DatePicker */}
-              {/*   inline */}
-              {/*   mode="range" */}
-              {/*   minDate={new Date()} */}
-              {/*   maxDate={maxDate()} */}
-              {/*   onChange={onCalendarChange} */}
-              {/*   dateFormat="Y-m-d" */}
-              {/*   isLoading={room.isLoading} */}
-              {/*   disable={room.blockedDate?.dates || []} */}
-              {/* /> */}
-              {/* <div className="px-2"> */}
-              {/*   <p className="mt-6 flex w-full justify-between"> */}
-              {/*     Total Price{" "} */}
-              {/*     <span> */}
-              {/*       <span className="text-faily">{price() || 0}</span> (GEL) */}
-              {/*     </span> */}
-              {/*   </p> */}
-              {/*   <Button */}
-              {/*     className="mt-8 text-xs" */}
-              {/*     disabled={!dateValues()?.length} */}
-              {/*     onClick={() => setBookingOpen(true)} */}
-              {/*   > */}
-              {/*     Book Now */}
-              {/*   </Button> */}
-              {/*   <p className="mt-10 w-full text-left"> */}
-              {/*     Pay now and get 5% discount */}
-              {/*   </p> */}
-              {/* </div> */}
-            </div>
+            <BookingCalendar
+              pricesList={room?.prices.list}
+              blockedDatesString={room?.blockedDate?.dates}
+            />
           )}
         </Suspense>
       </div>

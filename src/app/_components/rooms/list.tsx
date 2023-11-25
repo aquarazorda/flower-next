@@ -13,7 +13,11 @@ export default function RoomsList({ rooms }: Props) {
       <main className="my-10 flex flex-wrap justify-center gap-10 px-7 lg:grid lg:grid-cols-5 lg:gap-6">
         {rooms.map((room) => (
           <article className="flex flex-col">
-            <div className="relative h-64 lg:aspect-[1.17] lg:h-auto">
+            <Link
+              prefetch={false}
+              href={`/book/${room.roomId}`}
+              className="relative h-64 lg:aspect-[1.17] lg:h-auto"
+            >
               <Image
                 alt={room.name}
                 fill={true}
@@ -24,11 +28,13 @@ export default function RoomsList({ rooms }: Props) {
                 // onClick={() => navigate(`./${room.roomId}`)}
                 className="cursor-pointer rounded-2xl object-cover object-center"
               />
-            </div>
+            </Link>
             {/* <div className="h-full w-full rounded-xl bg-black/10" /> */}
             <div className="mt-5 flex flex-col gap-2 lg:mb-5">
               <h2 className="mt-auto flex justify-between font-medium text-zinc-500">
-                <Link href={`./${room.roomId}`}>{room.name}</Link>
+                <Link prefetch={false} href={`/book/${room.roomId}`}>
+                  {room.name}
+                </Link>
                 {/* <Button.Root onClick={showToast} className="lg:hidden"> */}
                 {/*   <Icon name="share" /> */}
                 {/* </Button.Root> */}
