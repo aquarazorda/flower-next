@@ -2,11 +2,13 @@
 
 import Image from "next/image";
 import { ComponentProps, useRef } from "react";
-import useOnScreen from "../_hooks/useOnScreen";
+import { useInView } from "react-intersection-observer";
 
 export default function LazyImage(props: ComponentProps<typeof Image>) {
-  const ref = useRef(null);
-  const isVisible = useOnScreen(ref);
+  const { ref, inView, entry } = useInView({
+    /* Optional options */
+    threshold: 0,
+  });
 
-  return <div ref={ref}>{isVisible && <Image {...props} />}</div>;
+  return <div ref={ref}>{inView && <Image {...props} />}</div>;
 }
