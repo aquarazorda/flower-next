@@ -8,6 +8,8 @@ import { auth } from "~/server/auth/lucia";
 import * as context from "next/headers";
 import { redirect } from "next/navigation";
 import { Button } from "~/app/_components/ui/button";
+import { AlignJustify, BookText } from "lucide-react";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Hotel Flower - CMS",
@@ -39,39 +41,23 @@ export default async function RootLayout({
                 Rooms
               </h2>
               <div className="space-y-1">
-                <Button variant="secondary" className="w-full justify-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="mr-2 h-4 w-4"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <polygon points="10 8 16 12 10 16 10 8" />
-                  </svg>
-                  List
+                <Button
+                  asChild
+                  variant="ghost"
+                  className="w-full justify-start"
+                >
+                  <Link href="/cms">
+                    <AlignJustify className="mr-2 h-4 w-4" /> List
+                  </Link>
                 </Button>
-                <Button variant="ghost" className="w-full justify-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="mr-2 h-4 w-4"
-                  >
-                    <rect width="7" height="7" x="3" y="3" rx="1" />
-                    <rect width="7" height="7" x="14" y="3" rx="1" />
-                    <rect width="7" height="7" x="14" y="14" rx="1" />
-                    <rect width="7" height="7" x="3" y="14" rx="1" />
-                  </svg>
-                  Bookings
+                <Button
+                  asChild
+                  variant="ghost"
+                  className="w-full justify-start"
+                >
+                  <Link href="/cms/bookings">
+                    <BookText className="mr-2 h-4 w-4" /> Bookings
+                  </Link>
                 </Button>
               </div>
             </div>
