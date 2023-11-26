@@ -13,7 +13,7 @@ export function delay(sec: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, sec * 1000));
 }
 
-export function isOneHourOrOlder(date1, date2) {
+export function isOneHourOrOlder(date1: Date, date2: Date) {
   const ONE_HOUR = 3600000; // milliseconds in one hour
   return Math.abs(date1.getTime() - date2.getTime()) >= ONE_HOUR;
 }
