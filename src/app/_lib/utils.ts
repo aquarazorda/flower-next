@@ -1,5 +1,6 @@
 import { JsonValue } from "@prisma/client/runtime/library";
 import { type ClassValue, clsx } from "clsx";
+import { addMonths, format, parse } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { twMerge } from "tailwind-merge";
 import { z } from "zod";
@@ -49,6 +50,17 @@ export const parsePrices = (prices: JsonValue) => {
   }
 
   return pricesParsed.data;
+};
+
+export const getDateAsStringPrice = (d: string) => {
+  const date = parse(d, "MM-yyyy", new Date());
+  return format(date, "MMMM yyyy");
+};
+
+export const getNextMonth = (dateString: string) => {
+  const date = parse(dateString, "MM-yyyy", new Date());
+  const nextMonth = addMonths(date, 1);
+  return format(nextMonth, "MM-yyyy");
 };
 
 export const calculatePrices = (

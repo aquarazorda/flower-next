@@ -4,8 +4,17 @@ import {
   TabsList,
   TabsTrigger,
 } from "~/app/_components/ui/tabs";
+import EditRoomInformation from "./edit-information";
+import { api } from "~/trpc/server";
+import RoomPriceListPage from "./prices-list";
 
-export default async function CMSRoomPage() {
+export default async function CMSRoomPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const room = await api.room.getRoom.query(params.id);
+
   return (
     <Tabs
       defaultValue="information"
@@ -16,10 +25,15 @@ export default async function CMSRoomPage() {
         <TabsTrigger value="prices">Prices</TabsTrigger>
         <TabsTrigger value="pictures">Pictures</TabsTrigger>
       </TabsList>
-      <TabsContent value="account">
-        Make changes to your account here.
+      <div className="mt-4 text-sm">
+        {room?.name} / {room?.roomId}
+      </div>
+      <TabsContent value="information">
+        <EditRoomInformation room={room} />
       </TabsContent>
-      <TabsContent value="password">Change your password here.</TabsContent>
+      <TabsContent value="prices">
+        <RoomPriceListPage room={room} />
+      </TabsContent>
     </Tabs>
   );
 }
