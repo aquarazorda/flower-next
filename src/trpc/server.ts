@@ -21,10 +21,12 @@ import { transformer } from "./shared";
  */
 const createContext = cache(() => {
   return createTRPCContext({
-    headers: new Headers({
-      cookie: cookies().toString(),
-      "x-trpc-source": "rsc",
-    }),
+    req: {
+      headers: new Headers({
+        cookie: cookies().toString(),
+        "x-trpc-source": "rsc",
+      }),
+    },
   });
 });
 

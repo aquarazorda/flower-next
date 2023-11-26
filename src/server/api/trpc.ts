@@ -9,6 +9,7 @@
 
 import { initTRPC, TRPCError } from "@trpc/server";
 import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest } from "next/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
@@ -26,7 +27,9 @@ import { db } from "~/server/db";
  *
  * @see https://trpc.io/docs/server/context
  */
-export const createTRPCContext = async (opts: { req: Request }) => {
+export const createTRPCContext = async (opts: {
+  req: Partial<NextRequest>;
+}) => {
   return {
     db,
     ...opts,
