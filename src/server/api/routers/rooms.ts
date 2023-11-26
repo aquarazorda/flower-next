@@ -64,4 +64,13 @@ export const roomRouter = createTRPCRouter({
 
     return data;
   }),
+  getBookings: publicProcedure
+    .input(z.number().optional())
+    .query(({ ctx, input }) => {
+      return ctx.db.blockedDate.findMany({
+        where: {
+          roomId: input,
+        },
+      });
+    }),
 });

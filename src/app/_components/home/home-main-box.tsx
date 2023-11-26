@@ -50,6 +50,7 @@ export default function HomeMainBox() {
           src="/images/main-desktop.webp"
           className="z-0 h-full w-full object-cover"
           fill={true}
+          loading="eager"
         />
       </div>
     </div>

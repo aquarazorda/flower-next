@@ -9,6 +9,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function delay(sec: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, sec * 1000));
+}
+
+export function isOneHourOrOlder(date1, date2) {
+  const ONE_HOUR = 3600000; // milliseconds in one hour
+  return Math.abs(date1.getTime() - date2.getTime()) >= ONE_HOUR;
+}
+
 export const getLastDayOfMonth = (dateString: string): Date | undefined => {
   const parts = dateString.split("-").map(Number);
   if (parts.length < 2 || parts[0] || parts[1]) {

@@ -1,8 +1,19 @@
 import { env } from "~/env";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { getBookedDates } from "~/server/otelms/bookings";
+import { kv } from "@vercel/kv";
+import { isOneHourOrOlder } from "~/app/_lib/utils";
 
 export const getLoginCookies = async () => {
+  const kvRes: { date: Date; cookie: string } | null = await kv.get(
+    "otelms-login-cookies",
+  );
+
+  if (kvRes?.cookie && !isOneHourOrOlder(new Date(), new Date(kvRes.date))) {
+    console.log(kvRes.cookie);
+    return kvRes.cookie;
+  }
+
   const { MS_LOGIN_URL, MS_LOGIN_EMAIL, MS_LOGIN_PASSWORD } = env;
 
   if (!MS_LOGIN_URL || !MS_LOGIN_EMAIL || !MS_LOGIN_PASSWORD) {
@@ -28,9 +39,29 @@ export const getLoginCookies = async () => {
   const pid = cookies?.[0];
   const cid = cookies?.[1]?.split(", ")[1];
 
+  kv.set("otelms-login-cookies", {
+    date: new Date(),
+    cookie: `${pid}; ${cid}`,
+  });
+
   return cid + "; " + pid;
 };
 
 export const otelmsRouter = createTRPCRouter({
   getBookedDates: publicProcedure.query(getBookedDates),
+  updateBookedDates: publicProcedure.mutation(async ({ ctx }) => {
+    const data = await getBookedDates();
+    console.log("12312312312312", data);
+
+    if (!data.length) {
+      return [];
+    }
+
+    await ctx.db.blockedDate.deleteMany();
+    await ctx.db.blockedDate.createMany({
+      data,
+    });
+
+    return data;
+  }),
 });

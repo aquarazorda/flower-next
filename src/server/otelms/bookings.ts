@@ -1,6 +1,6 @@
 import { env } from "~/env";
 import { getLoginCookies } from "../api/routers/otelms";
-import { getCurrentDate, getFutureDate } from "~/app/_lib/utils";
+import { delay, getCurrentDate, getFutureDate } from "~/app/_lib/utils";
 import { load } from "cheerio";
 
 export const getBookedDates = async () => {
@@ -13,11 +13,13 @@ export const getBookedDates = async () => {
   const headers = new Headers();
   const cookies = await getLoginCookies();
 
+  await delay(4);
+
   headers.append("Content-Type", "application/x-www-form-urlencoded");
   headers.append("cf-cookie", cookies);
 
   const body = new URLSearchParams();
-  body.append("date", `${getCurrentDate()} - ${getFutureDate(7)}`);
+  body.append("date", `${getCurrentDate()} - ${getFutureDate(24)}`);
   body.append("lines_per_page", "500");
   body.append("date_type", "0");
 
