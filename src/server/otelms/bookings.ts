@@ -1,22 +1,15 @@
 import { env } from "~/env";
-import { getLoginCookies } from "../api/routers/otelms";
-import { delay, getCurrentDate, getFutureDate } from "~/app/_lib/utils";
+import { getCurrentDate, getFutureDate } from "~/app/_lib/utils";
 import { load } from "cheerio";
+import { getOtelmsFetch } from "./auth";
 
 export const getBookedDates = async () => {
   const { MS_BOOKINGS_URL } = env;
-
-  if (!MS_BOOKINGS_URL) {
-    throw new Error("Missing env variables");
-  }
+  const customFetch = await getOtelmsFetch();
 
   const headers = new Headers();
-  const cookies = await getLoginCookies();
-
-  await delay(4);
 
   headers.append("Content-Type", "application/x-www-form-urlencoded");
-  headers.append("Cookie", cookies);
   headers.append(
     "User-Agent",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15",
@@ -27,7 +20,7 @@ export const getBookedDates = async () => {
   body.append("lines_per_page", "500");
   body.append("date_type", "0");
 
-  const res = await fetch(MS_BOOKINGS_URL, {
+  const res = await customFetch(MS_BOOKINGS_URL, {
     headers,
     body,
     method: "POST",
