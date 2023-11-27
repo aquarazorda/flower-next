@@ -6,7 +6,7 @@ import {
   TableRow,
 } from "~/app/_components/ui/table";
 import { api } from "~/trpc/server";
-import { RoomRow } from "./row";
+import { RoomRowList } from "./row";
 
 export default async function CMSDashboardPage() {
   const data = await api.room.get.query();
@@ -21,9 +21,7 @@ export default async function CMSDashboardPage() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((room) => (
-          <RoomRow room={room} />
-        ))}
+        <RoomRowList rooms={data} />
       </TableBody>
     </Table>
   );

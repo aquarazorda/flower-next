@@ -8,6 +8,7 @@ import { auth } from "~/server/auth/lucia";
 import * as context from "next/headers";
 import { redirect } from "next/navigation";
 import { Button } from "~/app/_components/ui/button";
+import { Toaster } from "~/app/_components/ui/toaster";
 import { AlignJustify, BookText } from "lucide-react";
 import Link from "next/link";
 
@@ -63,6 +64,7 @@ export default async function RootLayout({
             </div>
             <div className="flex w-full overflow-y-auto">{children}</div>
           </div>
+          <Toaster />
         </TRPCReactProvider>
       </body>
     </html>
