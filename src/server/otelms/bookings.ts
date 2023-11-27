@@ -16,7 +16,11 @@ export const getBookedDates = async () => {
   await delay(4);
 
   headers.append("Content-Type", "application/x-www-form-urlencoded");
-  headers.append("cf-cookie", cookies);
+  headers.append("Cookie", cookies);
+  headers.append(
+    "User-Agent",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15",
+  );
 
   const body = new URLSearchParams();
   body.append("date", `${getCurrentDate()} - ${getFutureDate(24)}`);
@@ -73,7 +77,9 @@ const generateBookingDates = (html: string) => {
 
   const res = [];
   for (const [key, value] of unique.entries()) {
-    res.push({ roomId: Number(key), dates: value });
+    if (Number(key) > 1) {
+      res.push({ roomId: Number(key), dates: value });
+    }
   }
 
   return res;

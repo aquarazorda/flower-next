@@ -10,7 +10,6 @@ export const getLoginCookies = async () => {
   );
 
   if (kvRes?.cookie && !isOneHourOrOlder(new Date(), new Date(kvRes.date))) {
-    console.log(kvRes.cookie);
     return kvRes.cookie;
   }
 
@@ -22,6 +21,10 @@ export const getLoginCookies = async () => {
 
   let headers = new Headers();
   headers.append("Content-Type", "application/x-www-form-urlencoded");
+  headers.append(
+    "User-Agent",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15",
+  );
 
   var urlencoded = new URLSearchParams();
   urlencoded.append("action", "login");
@@ -44,14 +47,13 @@ export const getLoginCookies = async () => {
     cookie: `${pid}; ${cid}`,
   });
 
-  return cid + "; " + pid;
+  return pid + "; " + cid;
 };
 
 export const otelmsRouter = createTRPCRouter({
   getBookedDates: publicProcedure.query(getBookedDates),
   updateBookedDates: publicProcedure.mutation(async ({ ctx }) => {
     const data = await getBookedDates();
-    console.log("12312312312312", data);
 
     if (!data.length) {
       return [];
