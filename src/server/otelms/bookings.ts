@@ -30,6 +30,7 @@ export const getBookedDates = async () => {
 };
 
 const generateBookingDates = (html: string) => {
+  console.log(html);
   const $ = load(html);
   const rows = $(".table.dataTable tr");
 

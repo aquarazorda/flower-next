@@ -13,11 +13,13 @@ async function getCachedCookieJar() {
 }
 
 export const getOtelmsFetch = async () => {
-  const cookieJar = await getCachedCookieJar();
+  let cookieJar = await getCachedCookieJar();
 
   if (cookieJar) {
     return fetchCookie(fetch, cookieJar);
   }
+
+  cookieJar = new fetchCookie.toughCookie.CookieJar();
 
   const { MS_LOGIN_URL, MS_LOGIN_EMAIL, MS_LOGIN_PASSWORD } = env;
 
@@ -26,10 +28,7 @@ export const getOtelmsFetch = async () => {
   urlencoded.append("login", MS_LOGIN_EMAIL);
   urlencoded.append("password", MS_LOGIN_PASSWORD);
 
-  const customFetch = fetchCookie(
-    fetch,
-    new fetchCookie.toughCookie.CookieJar(),
-  );
+  const customFetch = fetchCookie(fetch, cookieJar);
 
   await customFetch(MS_LOGIN_URL, {
     body: urlencoded,
@@ -41,7 +40,7 @@ export const getOtelmsFetch = async () => {
     },
   });
 
-  const serializedJar = customFetch.toughCookie.CookieJar.toString();
+  const serializedJar = await cookieJar.serialize();
 
   await kv.set("otelms-login-cookies", serializedJar, {
     ex: 60 * 60,
