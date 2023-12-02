@@ -9,6 +9,9 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import Image from "next/image";
 import { Label } from "~/app/_components/ui/label";
 import { Button } from "~/app/_components/ui/button";
+import { onImageSave } from "./actions";
+import { redirect } from "next/navigation";
+import { ButtonLoader } from "~/app/_components/ui/button-loader";
 
 type ImageElementProps = {
   id: any;
@@ -110,6 +113,10 @@ type Props = {
 };
 
 export default function EditRoomPictures({ room, imageCount }: Props) {
+  if (!room) {
+    redirect("/cms/room");
+  }
+
   const [displayedImages, setDisplayedImages] = useState(
     (room?.info?.pictures as number[]) || [],
   );
@@ -118,6 +125,8 @@ export default function EditRoomPictures({ room, imageCount }: Props) {
       (idx) => !displayedImages.includes(idx),
     ),
   );
+
+  const onImageSaveBound = onImageSave.bind(null, room.roomId);
 
   const moveCard = useCallback(
     (
@@ -207,7 +216,12 @@ export default function EditRoomPictures({ room, imageCount }: Props) {
           )}
         </div>
       </DndProvider>
-      <Button className="mb-4">Save</Button>
+      <form
+        action={() => onImageSaveBound(displayedImages)}
+        className="flex w-full"
+      >
+        <ButtonLoader className="mb-4 w-full">Save</ButtonLoader>
+      </form>
     </div>
   );
 }

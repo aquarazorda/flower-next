@@ -24,3 +24,18 @@ export const onPriceSave = async (roomId: number, values: FormData) => {
 
   revalidatePath(`/cms/cms/room/${roomId}`);
 };
+
+export const onImageSave = async (roomId: number, values: number[]) => {
+  const data = z.array(z.number()).safeParse(values);
+
+  if (data.success) {
+    await db.roomInfo.update({
+      where: { roomId },
+      data: {
+        pictures: values,
+      },
+    });
+  }
+
+  revalidatePath(`/cms/cms/room/${roomId}`);
+};
