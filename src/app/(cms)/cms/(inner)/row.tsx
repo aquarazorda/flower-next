@@ -26,9 +26,7 @@ export const RoomRowList = ({ rooms }: Props) => {
   const [list, setList_] = useState(rooms);
 
   const setList = (l: Room[]) => {
-    if (!isEdited) {
-      setIsEdited(true);
-    }
+    setIsEdited(true);
 
     setList_(l);
   };
@@ -47,6 +45,11 @@ export const RoomRowList = ({ rooms }: Props) => {
     },
     [list],
   );
+
+  const onCancel = useCallback(() => {
+    setIsEdited(false);
+    setList_(rooms);
+  }, [rooms]);
 
   const drawRow = useCallback((room: Room, index: number) => {
     return (
@@ -68,7 +71,9 @@ export const RoomRowList = ({ rooms }: Props) => {
             <Toast className="w-fit" open={true}>
               <ToastDescription className="flex gap-2">
                 <Button>Save</Button>
-                <Button variant="destructive">Cancel</Button>
+                <Button variant="destructive" onClick={onCancel}>
+                  Cancel
+                </Button>
               </ToastDescription>
             </Toast>
             <ToastViewport />

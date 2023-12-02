@@ -2,11 +2,20 @@
 import { useFormStatus } from "react-dom";
 
 import { Button, ButtonProps } from "./button";
+import { cn } from "~/app/_lib/utils";
 
-export const ButtonLoader = ({ children, ...props }: ButtonProps) => {
+export const ButtonLoader = ({
+  children,
+  className,
+  ...props
+}: ButtonProps) => {
   const { pending } = useFormStatus();
   return (
-    <Button {...props} disabled={pending} className="flex items-center gap-2">
+    <Button
+      {...props}
+      disabled={pending}
+      className={cn("flex items-center gap-2", className)}
+    >
       {pending && (
         <svg
           aria-hidden="true"

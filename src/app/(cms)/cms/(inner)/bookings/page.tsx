@@ -2,6 +2,7 @@ import { format, parse } from "date-fns";
 import { revalidatePath } from "next/cache";
 import { Badge } from "~/app/_components/ui/badge";
 import { Button } from "~/app/_components/ui/button";
+import { ButtonLoader } from "~/app/_components/ui/button-loader";
 import {
   Table,
   TableBody,
@@ -60,7 +61,7 @@ export default async function BookingsPage() {
         </TableBody>
       </Table>
       <form action={updateBookings}>
-        <Button className="w-full rounded-none">Update</Button>
+        <ButtonLoader className="w-full rounded-none">Update</ButtonLoader>
       </form>
     </div>
   );
