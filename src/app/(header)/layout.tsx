@@ -6,6 +6,7 @@ import { shippori } from "../_styles/fonts";
 import { Header } from "../_components/header";
 import Footer from "../_components/footer";
 import { Metadata } from "next";
+import { Toaster } from "../_components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Hotel Flower",
@@ -27,6 +28,7 @@ export default function RootLayout({
           <Header />
           {children}
           <Footer />
+          <Toaster />
         </TRPCReactProvider>
       </body>
     </html>
