@@ -13,6 +13,14 @@ export const getBookedDates = async () => {
   body.append("lines_per_page", "500");
   body.append("date_type", "0");
 
+  for (let i = 1; i < 36; i++) {
+    body.append("categories[]", String(i));
+  }
+
+  for (let i = 0; i < 8; i++) {
+    body.append("statuses[]", String(i));
+  }
+
   const res = await fetch(MS_URL + "/reservation_c2/rlist/1", {
     headers,
     body,
