@@ -7,8 +7,7 @@
  * need to use are documented accordingly near the end.
  */
 
-import { initTRPC, TRPCError } from "@trpc/server";
-import { NextApiRequest, NextApiResponse } from "next";
+import { initTRPC } from "@trpc/server";
 import { NextRequest } from "next/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
