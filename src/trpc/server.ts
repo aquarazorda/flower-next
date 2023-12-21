@@ -23,7 +23,7 @@ const createContext = cache(() => {
   return createTRPCContext({
     req: {
       headers: new Headers({
-        cookie: cookies().toString(),
+        // cookie: cookies().toString(),
         "x-trpc-source": "rsc",
       }),
     },
