@@ -6,7 +6,12 @@ import { zfd } from "zod-form-data";
 import { db } from "~/server/db";
 
 export const onPriceSave = async (roomId: number, values: FormData) => {
-  const schema = zfd.formData(z.record(zfd.text(), zfd.text()));
+  const schema = zfd.formData(
+    z.record(
+      zfd.text(),
+      zfd.text().transform((t) => Number(t)),
+    ),
+  );
 
   const data = schema.safeParse(values);
 

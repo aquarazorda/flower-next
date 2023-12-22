@@ -5,6 +5,8 @@ import { Suspense } from "react";
 import { CancelRounded } from "~/app/_assets/icons/CancelRounded";
 import { CheckRounded } from "~/app/_assets/icons/CheckRounded";
 import BookingCalendar from "./calendar";
+import { cn } from "~/app/_lib/utils";
+import { inter } from "~/app/_styles/fonts";
 
 type Props = {
   params: { id: string };
@@ -111,10 +113,12 @@ export default async function RoomItemPage({ params }: Props) {
               Booking for this room is not available.
             </div>
           ) : (
-            <BookingCalendar
-              pricesList={room?.prices.list}
-              blockedDatesString={room?.blockedDate?.dates}
-            />
+            <div className={cn("flex w-full justify-center", inter.className)}>
+              <BookingCalendar
+                pricesList={room?.prices.list}
+                blockedDatesString={room?.blockedDate?.dates}
+              />
+            </div>
           )}
         </Suspense>
       </div>

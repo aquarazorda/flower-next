@@ -13,12 +13,9 @@ export const roomRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return ctx.db.room.findMany({
         select: {
-          id: true,
           type: true,
-          blockedDate: true,
           info: true,
           name: true,
-          prices: true,
           roomId: true,
           order: true,
         },

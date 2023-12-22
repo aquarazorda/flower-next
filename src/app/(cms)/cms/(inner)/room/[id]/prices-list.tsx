@@ -1,7 +1,7 @@
 "use client";
 
-import { format } from "date-fns";
-import { useCallback, useState } from "react";
+import { endOfMonth, format, isAfter, parse } from "date-fns";
+import { useCallback, useMemo, useState } from "react";
 import { Button } from "~/app/_components/ui/button";
 import { ButtonLoader } from "~/app/_components/ui/button-loader";
 import { Input } from "~/app/_components/ui/input";
@@ -27,9 +27,28 @@ export default function RoomPriceListPage({ room }: Props) {
     redirect("/cms/room");
   }
 
+  const prices = useMemo(() => {
+    const temp = room?.prices?.list as Record<string, number>;
+
+    return Object.keys(temp).reduce(
+      (acc, key) => {
+        const parsedDate = endOfMonth(parse(key, "MM-yyyy", new Date()));
+
+        if (temp[key] !== undefined && isAfter(parsedDate, new Date())) {
+          if (!acc) acc = {};
+          // @ts-ignore
+          acc[key] = temp[key];
+        }
+        return acc;
+      },
+      undefined as Record<string, number> | undefined,
+    );
+  }, [room]);
+
   const updateWithRoomId = onPriceSave.bind(null, room.roomId);
+
   const [data, setData] = useState(
-    (room?.prices?.list as Record<string, number>) || {
+    prices || {
       [format(new Date(), "MM-yyyy")]: 0,
     },
   );
@@ -57,12 +76,10 @@ export default function RoomPriceListPage({ room }: Props) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {/* @ts-ignore */}
           {Object.keys(data).map((key) => (
             <TableRow key={key}>
               <TableCell>{getDateAsStringPrice(key)}</TableCell>
               <TableCell>
-                {/* @ts-ignore */}
                 <Input defaultValue={data?.[key]} name={key} />
               </TableCell>
               <TableCell>GEL</TableCell>

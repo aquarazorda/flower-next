@@ -41,11 +41,11 @@ export default function BookingCalendar({
   }, [range, pricesList]);
 
   const maxDate = useMemo(() => {
-    if (!pricesList) return undefined;
+    if (!pricesList) return new Date();
     const keys = Object.keys(pricesList);
     const price = keys[keys.length - 1];
     if (!price) {
-      return undefined;
+      return new Date();
     }
 
     return getLastDayOfMonth(price);
@@ -69,7 +69,8 @@ export default function BookingCalendar({
           </span>
         </p>
         <Button
-          className="mt-8 text-xs"
+          variant="outline"
+          className="mt-6 w-full text-xs"
           disabled={!range?.to || !range?.from || !price}
           // onClick={() => setBookingOpen(true)}
         >

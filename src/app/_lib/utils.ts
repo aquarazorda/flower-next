@@ -1,6 +1,6 @@
 import { JsonValue } from "@prisma/client/runtime/library";
 import { type ClassValue, clsx } from "clsx";
-import { addMonths, format, parse } from "date-fns";
+import { addMonths, endOfMonth, format, parse } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { twMerge } from "tailwind-merge";
 import { z } from "zod";
@@ -19,19 +19,9 @@ export function isOneHourOrOlder(date1: Date, date2: Date) {
 }
 
 export const getLastDayOfMonth = (dateString: string): Date | undefined => {
-  const parts = dateString.split("-").map(Number);
-  if (parts.length < 2 || parts[0] || parts[1]) {
-    return undefined;
-  }
+  const parsedDate = parse(dateString, "MM-yyyy", new Date());
 
-  const [year, month] = parts;
-
-  if (!year || !month) {
-    return undefined;
-  }
-
-  const date = new Date(Date.UTC(year, month, 0, 4)); // GMT+4 timezone offset
-  return date;
+  return endOfMonth(parsedDate);
 };
 
 export const toGmt4 = (date: Date) => {
@@ -84,7 +74,7 @@ export const calculatePrices = (
   let endDate = new Date(to);
 
   while (currentDate <= endDate) {
-    const month = currentDate.getMonth();
+    const month = currentDate.getMonth() + 1;
     const year = currentDate.getFullYear();
     dates_.push({ month, year });
     currentDate.setDate(currentDate.getDate() + 1);
