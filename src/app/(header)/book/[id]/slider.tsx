@@ -49,9 +49,11 @@ export default function RoomSlider({ name, roomId, pictures }: Props) {
               currSlideIndex - 1 === idx ? (
                 <Image
                   alt={name}
-                  fill={true}
-                  src={`/images/${roomId}/${item}-desktop.webp`}
+                  fill
+                  sizes={"70vw"}
+                  src={`/images/rooms/${item}`}
                   className="object-cover"
+                  priority={currSlideIndex === idx}
                 />
               ) : null}
             </div>

@@ -24,16 +24,9 @@ export async function generateMetadata({ params }: Props) {
       images: [
         {
           // @ts-ignore
-          url: `https://flowertbilisi.com/images/${data?.roomId}/${data?.info?.pictures?.[0]}-og.jpg`,
-          width: 800,
-          height: 600,
-        },
-        {
-          // @ts-ignore
-          url: `https://flowertbilisi.com/images/${data?.roomId}/${data?.info?.pictures[0]}-og-alt.jpg`,
-          width: 1800,
-          height: 1600,
-          alt: data?.name,
+          url: `/_next/image?url=/images/${data?.info?.pictures?.[0]}&w=1200&q=75`,
+          width: 1200,
+          height: 800,
         },
       ],
     },
@@ -43,7 +36,7 @@ export async function generateMetadata({ params }: Props) {
       card: "summary_large_image",
       images: [
         // @ts-ignore
-        `https://flowertbilisi.com/images/${data?.roomId}/${data?.info?.pictures?.[0]}-og.jpg`,
+        `/_next/image?url=/images/rooms/${data?.info?.pictures?.[0]}&w=1200&q=75`,
       ],
     },
   };
@@ -51,6 +44,7 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function RoomItemPage({ params }: Props) {
   const room = await api.room.getRoom.query(params.id);
+  console.log(room);
 
   if (!room) {
     return redirect("/book");

@@ -8,7 +8,6 @@ import { RouterOutputs } from "~/trpc/shared";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import Image from "next/image";
 import { Label } from "~/app/_components/ui/label";
-import { Button } from "~/app/_components/ui/button";
 import { onImageSave } from "./actions";
 import { redirect } from "next/navigation";
 import { ButtonLoader } from "~/app/_components/ui/button-loader";
@@ -94,13 +93,23 @@ const ImageElement = ({
 
   const opacity = isDragging ? 0 : 1;
   drag(drop(ref));
+
   return (
-    <div ref={ref} style={{ opacity }} data-handler-id={handlerId}>
+    <div
+      ref={ref}
+      style={{
+        opacity,
+        height: "256px",
+        width: "256px",
+      }}
+      data-handler-id={handlerId}
+      className="relative"
+    >
       <Image
         src={url}
-        className="h-44 overflow-hidden"
-        width={256}
-        height={256}
+        sizes="512px"
+        className="overflow-hidden"
+        fill
         alt={`img-${id}`}
       />
     </div>
@@ -109,21 +118,22 @@ const ImageElement = ({
 
 type Props = {
   room: RouterOutputs["room"]["getRoom"];
-  imageCount: number;
+  defaultImages: string[];
 };
 
-export default function EditRoomPictures({ room, imageCount }: Props) {
+export default function EditRoomPictures({ room, defaultImages }: Props) {
   if (!room) {
     redirect("/cms/room");
   }
 
   const [displayedImages, setDisplayedImages] = useState(
-    (room?.info?.pictures as number[]) || [],
+    (room?.info?.pictures as string[]).filter(
+      (item) => typeof item === "string",
+    ) || [],
   );
+
   const [availableImages, setAvailableImages] = useState(
-    Array.from(Array(imageCount).keys()).filter(
-      (idx) => !displayedImages.includes(idx),
-    ),
+    defaultImages.filter((item) => !displayedImages.includes(item)),
   );
 
   const onImageSaveBound = onImageSave.bind(null, room.roomId);
@@ -140,11 +150,11 @@ export default function EditRoomPictures({ room, imageCount }: Props) {
           sourceListType === "displayed"
             ? setDisplayedImages
             : setAvailableImages;
-        setCards((prevCards: number[]) =>
+        setCards((prevCards: string[]) =>
           update(prevCards, {
             $splice: [
               [dragIndex, 1],
-              [hoverIndex, 0, prevCards[dragIndex] as number],
+              [hoverIndex, 0, prevCards[dragIndex] as string],
             ],
           }),
         );
@@ -177,18 +187,13 @@ export default function EditRoomPictures({ room, imageCount }: Props) {
   );
 
   const renderCard = useCallback(
-    (
-      imageIdx: number,
-      roomId: number,
-      index: number,
-      listType: "displayed" | "available",
-    ) => {
+    (imageIdx: number, image: string, listType: "displayed" | "available") => {
       return (
         <ImageElement
-          key={imageIdx}
-          index={index}
+          key={image}
+          index={imageIdx}
           id={imageIdx}
-          url={`/images/${roomId}/${imageIdx}-mobile.webp`}
+          url={`/images/rooms/${image}`}
           // @ts-ignore
           moveCard={moveCard}
           listType={listType}
@@ -202,17 +207,19 @@ export default function EditRoomPictures({ room, imageCount }: Props) {
     <div className="flex flex-col gap-4">
       <DndProvider backend={HTML5Backend}>
         <Label>Images which are displayed on the website</Label>
-        <div className="flex flex-wrap gap-2 bg-slate-100 p-2">
-          {displayedImages.map((imgIdx, idx) =>
+        <div className="flex min-h-12 flex-wrap gap-2 bg-slate-100 p-2">
+          {displayedImages.map((item, imgIdx) =>
             // @ts-ignore
-            renderCard(imgIdx, room?.roomId, idx, "displayed"),
+            renderCard(imgIdx, item, "displayed"),
           )}
+          {displayedImages.length < 1 &&
+            renderCard(0, availableImages[0], "displayed")}
         </div>
         <Label>Available images</Label>
         <div className="flex flex-wrap gap-2 bg-slate-100 p-2">
-          {availableImages.map((imgIdx, idx) =>
+          {availableImages.map((item, imgIdx) =>
             // @ts-ignore
-            renderCard(imgIdx, room?.roomId, idx, "available"),
+            renderCard(imgIdx, item, "available"),
           )}
         </div>
       </DndProvider>

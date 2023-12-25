@@ -8,7 +8,22 @@ import EditRoomInformation from "./edit-information";
 import { api } from "~/trpc/server";
 import RoomPriceListPage from "./prices-list";
 import EditRoomPictures from "./edit-pictures";
-import { readdirSync } from "fs";
+import { relatedRooms } from "~/app/_assets/relatedRoomImages";
+import { roomImageList } from "~/app/_assets/roomImages";
+
+const getDefaultImages = (roomId: string) => {
+  if (roomImageList[roomId]) {
+    return roomImageList[roomId].map((item) => roomId + "/" + item);
+  }
+
+  for (const item of relatedRooms) {
+    if (item.related.find((val) => val === roomId)) {
+      return (
+        roomImageList[item.master]?.map((img) => item.master + "/" + img) || []
+      );
+    }
+  }
+};
 
 export default async function CMSRoomPage({
   params,
@@ -16,12 +31,7 @@ export default async function CMSRoomPage({
   params: { id: string };
 }) {
   const room = await api.room.getRoom.query(params.id);
-
-  const folders = readdirSync("./public/images/" + params.id).sort((a, b) => {
-    return Number(a.split("-")[0]) - Number(b.split("-")[0]);
-  });
-
-  const imageCount = Number(folders[folders.length - 1]?.split("-")[0]);
+  const defaultImages = getDefaultImages(params.id);
 
   return (
     <Tabs
@@ -44,9 +54,11 @@ export default async function CMSRoomPage({
       <TabsContent value="prices">
         <RoomPriceListPage room={room} />
       </TabsContent>
-      <TabsContent value="pictures">
-        <EditRoomPictures room={room} imageCount={imageCount} />
-      </TabsContent>
+      {defaultImages && (
+        <TabsContent value="pictures">
+          <EditRoomPictures room={room} defaultImages={defaultImages} />
+        </TabsContent>
+      )}
     </Tabs>
   );
 }
