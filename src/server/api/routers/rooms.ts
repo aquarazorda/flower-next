@@ -18,6 +18,7 @@ export const roomRouter = createTRPCRouter({
           name: true,
           roomId: true,
           order: true,
+          id: true,
         },
         orderBy: {
           order: "asc",
