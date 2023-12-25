@@ -57,25 +57,24 @@ export default async function RoomItemPage({ params }: Props) {
   }
 
   return (
-    <main className="mb-10 flex flex-col gap-6 text-xs text-neutral-500 lg:mb-0 lg:flex-row">
+    <main className="mb-10 flex flex-col gap-6 text-neutral-500 lg:mb-0 lg:flex-row">
       <RoomSlider
         pictures={room.info?.pictures as string[]}
         roomId={room.roomId}
         name={room.name}
       />
-      <div className="flex flex-col px-8 lg:mb-40 lg:flex-1 lg:flex-row lg:justify-around lg:px-0 lg:pt-20">
-        <div className="font-shippori lg:my-auto lg:flex lg:w-2/5 lg:flex-col">
-          <h2 className="text-lg text-secondaryHover">{room.name}</h2>
-          <p className="mt-5">{room.info?.description} </p>
+      <div className="flex flex-col lg:mb-40 lg:flex-1 lg:flex-row lg:justify-around lg:gap-6 lg:px-8 lg:pt-20">
+        <div className="px-8 font-shippori lg:my-auto lg:flex lg:flex-col">
+          <h2 className="text-xl text-secondaryHover">{room.name}</h2>
+          <p className="mt-5 text-pretty">{room.info?.description}</p>
           <p className="mt-2 hidden lg:block">
             The accommodation provides an ironing service, as well as business
             facilities like fax and photocopying. Non-stop information is
             available at the reception, where staff speak English, Georgian and
             Russian.
           </p>
-
-          <div className="mt-10 flex flex-col gap-4 px-6 lg:px-0">
-            <h3 className="text-base">Amenities</h3>
+          <div className="mt-10 flex flex-col gap-4">
+            <h3 className="text-xl">Amenities</h3>
             <ul className="grid gap-4 lg:grid-cols-auto-fill">
               <li className="flex items-center gap-4 whitespace-nowrap">
                 <CancelRounded /> Non smoking room
@@ -113,7 +112,12 @@ export default async function RoomItemPage({ params }: Props) {
               Booking for this room is not available.
             </div>
           ) : (
-            <div className={cn("flex w-full justify-center", inter.className)}>
+            <div
+              className={cn(
+                "flex w-full justify-center lg:pr-6",
+                inter.className,
+              )}
+            >
               <BookingCalendar
                 pricesList={room?.prices.list}
                 blockedDatesString={room?.blockedDate?.dates}

@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`font-sans flex min-h-screen flex-col ${shippori.className}`}
+        className={`flex min-h-screen flex-col font-shippori ${shippori.className}`}
       >
         <TRPCReactProvider cookies={cookies().toString()}>
           <Header />

@@ -5,6 +5,11 @@ import { useMemo, useState } from "react";
 import { DateRange } from "react-day-picker";
 import { Button } from "~/app/_components/ui/button";
 import { Calendar } from "~/app/_components/ui/calendar";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "~/app/_components/ui/dialog";
 import { calculatePrices, getLastDayOfMonth } from "~/app/_lib/utils";
 
 type Props = {
@@ -68,14 +73,18 @@ export default function BookingCalendar({
             <span className="text-faily">{price || 0}</span> (GEL)
           </span>
         </p>
-        <Button
-          variant="outline"
-          className="mt-6 w-full text-xs"
-          disabled={!range?.to || !range?.from || !price}
-          // onClick={() => setBookingOpen(true)}
-        >
-          Book Now
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              className="mt-6 w-full text-xs"
+              disabled={!range?.to || !range?.from || !price}
+            >
+              Book Now
+            </Button>
+          </DialogTrigger>
+          <DialogContent>Aye</DialogContent>
+        </Dialog>
         <p className="mt-10 w-full text-left">Pay now and get 5% discount</p>
       </div>
     </div>
