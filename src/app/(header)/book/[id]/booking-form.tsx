@@ -1,0 +1,84 @@
+import { useFormContext } from "react-hook-form";
+import { Button } from "~/app/_components/ui/button";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "~/app/_components/ui/form";
+import { Input } from "~/app/_components/ui/input";
+
+type Props = {
+  emailVerificationDisabled?: boolean;
+};
+
+export default function BookingFormInputs({
+  emailVerificationDisabled,
+}: Props) {
+  const form = useFormContext();
+
+  return (
+    <div className="mt-4 flex flex-col gap-2">
+      <div className="flex gap-2">
+        <FormField
+          control={form.control}
+          name="firstName"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormControl>
+                <Input placeholder="First Name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="lastName"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormControl>
+                <Input placeholder="Last Name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      <FormField
+        control={form.control}
+        name="phone"
+        render={({ field }) => (
+          <FormItem className="flex-1">
+            <FormControl>
+              <Input placeholder="Phone Number" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="email"
+        render={({ field }) => {
+          return (
+            <FormItem className="flex">
+              <div className="flex w-full gap-2">
+                <FormControl>
+                  <Input
+                    className="flex-1"
+                    placeholder="Email Address"
+                    {...field}
+                  />
+                </FormControl>
+                <Button type="button" disabled={emailVerificationDisabled}>
+                  Validate
+                </Button>
+              </div>
+            </FormItem>
+          );
+        }}
+      />
+    </div>
+  );
+}

@@ -209,16 +209,15 @@ export default function EditRoomPictures({ room, defaultImages }: Props) {
         <Label>Images which are displayed on the website</Label>
         <div className="flex min-h-12 flex-wrap gap-2 bg-slate-100 p-2">
           {displayedImages.map((item, imgIdx) =>
-            // @ts-ignore
             renderCard(imgIdx, item, "displayed"),
           )}
           {displayedImages.length < 1 &&
-            renderCard(0, availableImages[0], "displayed")}
+            availableImages.length > 0 &&
+            renderCard(0, availableImages[0]!, "displayed")}
         </div>
         <Label>Available images</Label>
         <div className="flex flex-wrap gap-2 bg-slate-100 p-2">
           {availableImages.map((item, imgIdx) =>
-            // @ts-ignore
             renderCard(imgIdx, item, "available"),
           )}
         </div>

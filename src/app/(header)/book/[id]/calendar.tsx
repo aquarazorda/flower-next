@@ -11,6 +11,8 @@ import {
   DialogTrigger,
 } from "~/app/_components/ui/dialog";
 import { calculatePrices, getLastDayOfMonth } from "~/app/_lib/utils";
+import BookModal from "./book-modal";
+import { DisplayPrice } from "./utils";
 
 type Props = {
   pricesList?: JsonValue;
@@ -67,12 +69,7 @@ export default function BookingCalendar({
         disabled={blockedDates}
       />
       <div className="px-2">
-        <p className="mt-6 flex w-full justify-between">
-          Total Price{" "}
-          <span>
-            <span className="text-faily">{price || 0}</span> (GEL)
-          </span>
-        </p>
+        <DisplayPrice price={price} salePercent={5} />
         <Dialog>
           <DialogTrigger asChild>
             <Button
@@ -83,9 +80,13 @@ export default function BookingCalendar({
               Book Now
             </Button>
           </DialogTrigger>
-          <DialogContent>Aye</DialogContent>
+          <DialogContent>
+            {range && <BookModal range={range} price={price} />}
+          </DialogContent>
         </Dialog>
-        <p className="mt-10 w-full text-left">Pay now and get 5% discount</p>
+        <p className="mt-6 w-full text-left text-sm">
+          Pay now and get 5% discount
+        </p>
       </div>
     </div>
   );
