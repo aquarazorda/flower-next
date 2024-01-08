@@ -13,7 +13,7 @@ import { roomImageList } from "~/app/_assets/roomImages";
 
 const getDefaultImages = (roomId: string) => {
   if (roomImageList[roomId]) {
-    return roomImageList[roomId].map((item) => roomId + "/" + item);
+    return roomImageList[roomId]?.map((item) => roomId + "/" + item);
   }
 
   for (const item of relatedRooms) {
