@@ -81,7 +81,7 @@ export const calculatePrices = (
   }
 
   const price = dates_.reduce((acc, { month, year }) => {
-    const price = prices[`${month}-${year}`];
+    const price = prices[`${month < 10 ? "0" + month : month}-${year}`];
 
     return price ? acc + price : 0;
   }, 0);

@@ -18,6 +18,7 @@ export const env = createEnv({
       .enum(["development", "test", "production"])
       .default("development"),
     MS_URL: z.string().url(),
+    SENDGRID_KEY: z.string(),
   },
 
   /**
@@ -37,6 +38,7 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     MS_URL: process.env.MS_URL,
+    SENDGRID_KEY: process.env.SENDGRID_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

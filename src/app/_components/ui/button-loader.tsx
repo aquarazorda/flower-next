@@ -13,6 +13,7 @@ export const ButtonLoader = ({
   return (
     <Button
       {...props}
+      variant="outline"
       disabled={pending}
       className={cn("flex items-center gap-2", className)}
     >

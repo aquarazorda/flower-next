@@ -19,6 +19,7 @@ import { phoneRegex } from "~/app/_lib/clipboard";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "~/app/_components/ui/form";
+import { useState } from "react";
 
 type Props = {
   range: DateRange;
@@ -30,6 +31,10 @@ const formSchema = z.object({
   lastName: z.string().min(2, "Last name is too short"),
   email: z.string().email("Invalid email"),
   phone: z.string().regex(phoneRegex, "Invalid phone number"),
+  verificationCode: z
+    .string()
+    .min(6, "Invalid verification code")
+    .max(6, "Invalid verification code"),
 });
 
 export default function BookModal({ price, range }: Props) {
@@ -39,12 +44,13 @@ export default function BookModal({ price, range }: Props) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    reValidateMode: "onChange",
+    reValidateMode: "onSubmit",
     defaultValues: {
       phone: "",
       lastName: "",
       firstName: "",
       email: "",
+      verificationCode: "",
     },
   });
 
@@ -52,13 +58,13 @@ export default function BookModal({ price, range }: Props) {
     <Tabs defaultValue="pay" className={cn(inter.className)}>
       <TabsList className="bg-transparent">
         <TabsTrigger
-          className="rounded text-neutral-400 data-[state=active]:bg-secondaryHover data-[state=active]:text-white"
+          className="rounded text-neutral-400 data-[state=active]:bg-secondaryHover data-[state=active]:text-white hover:data-[state=active]:bg-secondaryHover/80"
           value="pay"
         >
           Pay
         </TabsTrigger>
         <TabsTrigger
-          className="rounded text-neutral-400 data-[state=active]:bg-secondaryHover data-[state=active]:text-white"
+          className="rounded text-neutral-400 data-[state=active]:bg-secondaryHover data-[state=active]:text-white hover:data-[state=active]:bg-secondaryHover/80"
           value="reservation"
         >
           Reservation

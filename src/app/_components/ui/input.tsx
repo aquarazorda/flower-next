@@ -16,7 +16,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         ref={ref}
         {...props}
-        value={props.value ?? ""}
       />
     );
   },
