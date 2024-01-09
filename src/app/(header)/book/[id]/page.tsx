@@ -12,6 +12,8 @@ type Props = {
   params: { id: string };
 };
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({ params }: Props) {
   const data = await api.room.getRoom.query(params.id);
 
@@ -44,7 +46,6 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function RoomItemPage({ params }: Props) {
   const room = await api.room.getRoom.query(params.id);
-  console.log(room);
 
   if (!room) {
     return redirect("/book");
