@@ -13,6 +13,7 @@ import {
 import { calculatePrices, getLastDayOfMonth } from "~/app/_lib/utils";
 import BookModal from "./book-modal";
 import { DisplayPrice } from "./utils";
+import { isDateRangeBlocked } from "~/app/_lib/date";
 
 type Props = {
   pricesList?: JsonValue;
@@ -58,11 +59,26 @@ export default function BookingCalendar({
     return getLastDayOfMonth(price);
   }, [pricesList]);
 
+  const onSelect = (range?: DateRange) => {
+    if (range && range.from && range.to) {
+      const isBlocked = isDateRangeBlocked(
+        { from: range.from, to: range.to },
+        blockedDates,
+      );
+
+      if (isBlocked) {
+        return;
+      }
+    }
+
+    setRange(range);
+  };
+
   return (
     <div className="flex h-full flex-col justify-center">
       <Calendar
         mode="range"
-        onSelect={setRange}
+        onSelect={(range) => onSelect(range)}
         selected={range}
         fromDate={new Date()}
         toDate={maxDate}
