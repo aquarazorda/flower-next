@@ -116,6 +116,7 @@ export default async function RoomItemPage({ params }: Props) {
               <BookingCalendar
                 pricesList={room?.prices.list}
                 blockedDatesString={room?.blockedDate?.dates}
+                roomId={params.id}
               />
             </div>
           )}

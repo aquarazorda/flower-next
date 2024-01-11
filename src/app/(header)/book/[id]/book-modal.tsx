@@ -24,6 +24,7 @@ import { useState } from "react";
 type Props = {
   range: DateRange;
   price: number;
+  roomId: string;
 };
 
 const formSchema = z.object({
@@ -37,10 +38,13 @@ const formSchema = z.object({
     .max(6, "Invalid verification code"),
 });
 
-export default function BookModal({ price, range }: Props) {
-  const [state, formAction] = useFormState(createBooking.bind(null, range), {
-    error: undefined,
-  });
+export default function BookModal({ price, range, roomId }: Props) {
+  const [state, formAction] = useFormState(
+    createBooking.bind(null, { roomId, range }),
+    {
+      error: undefined,
+    },
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

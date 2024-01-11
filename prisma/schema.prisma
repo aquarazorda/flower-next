@@ -105,12 +105,46 @@ model Transaction {
   transactionId String?
 }
 
+enum VerificationStatus {
+  PENDING
+  FAILED
+  SUCCESS
+}
+
 model VerifiedEmail {
-    id          Int @id @default(autoincrement())
-    email       String @unique
-    status     String   @default("pending")
-    verificationCode String
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-    @@index([email])
-  }
+  id               Int                @id @default(autoincrement())
+  email            String             @unique
+  status           VerificationStatus @default(PENDING)
+  verificationCode String
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  @@index([email])
+}
+
+enum ReservationType {
+  PAYMENT
+  RESERVATION
+}
+
+enum ReservationStatus {
+  PENDING
+  FAILED
+  PAID
+  RESERVED
+}
+
+model Reservation {
+  id          String            @id @default(uuid())
+  email       String
+  phoneNumber String
+  firstName   String
+  lastName    String
+  status      ReservationStatus @default(PENDING)
+  price       Int               @default(0)
+  roomId      Int
+  dateFrom    DateTime
+  dateTo      DateTime
+  error       String?
+  type        ReservationType
+}

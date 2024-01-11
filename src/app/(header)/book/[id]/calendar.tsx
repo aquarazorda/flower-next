@@ -18,6 +18,7 @@ import { isDateRangeBlocked } from "~/app/_lib/date";
 type Props = {
   pricesList?: JsonValue;
   blockedDatesString?: JsonValue;
+  roomId: string;
 };
 
 type BlockedDate = {
@@ -28,6 +29,7 @@ type BlockedDate = {
 export default function BookingCalendar({
   pricesList,
   blockedDatesString,
+  roomId,
 }: Props) {
   const [range, setRange] = useState<DateRange | undefined>();
 
@@ -97,7 +99,7 @@ export default function BookingCalendar({
             </Button>
           </DialogTrigger>
           <DialogContent>
-            {range && <BookModal range={range} price={price} />}
+            {range && <BookModal range={range} price={price} roomId={roomId} />}
           </DialogContent>
         </Dialog>
         <p className="mt-6 w-full text-left text-sm">
