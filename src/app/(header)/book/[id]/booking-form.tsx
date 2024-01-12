@@ -144,20 +144,18 @@ export default function BookingFormInputs() {
           );
         }}
       />
-      {codeSent && (
-        <FormField
-          control={form.control}
-          name="verificationCode"
-          render={({ field }) => (
-            <FormItem className="flex-1">
-              <FormControl>
-                <Input placeholder="Verification Code" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      )}
+      <FormField
+        control={form.control}
+        name="verificationCode"
+        render={({ field }) => (
+          <FormItem className="flex-1">
+            <FormControl>
+              <Input placeholder="Verification Code" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
     </div>
   );
 }

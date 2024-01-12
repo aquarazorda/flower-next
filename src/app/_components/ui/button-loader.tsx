@@ -10,11 +10,12 @@ export const ButtonLoader = ({
   ...props
 }: ButtonProps) => {
   const { pending } = useFormStatus();
+
   return (
     <Button
       {...props}
       variant="outline"
-      disabled={pending}
+      disabled={pending || props.disabled}
       className={cn("flex items-center gap-2", className)}
     >
       {pending && (

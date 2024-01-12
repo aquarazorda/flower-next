@@ -9,7 +9,6 @@ import {
 import { cn } from "~/app/_lib/utils";
 import { inter } from "~/app/_styles/fonts";
 import BookingFormInputs from "./booking-form";
-import { Button } from "~/app/_components/ui/button";
 import { DateRange } from "react-day-picker";
 import { DisplayPrice } from "./utils";
 import { createBooking } from "~/server/bookings";
@@ -19,7 +18,9 @@ import { phoneRegex } from "~/app/_lib/clipboard";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "~/app/_components/ui/form";
-import { useState } from "react";
+import { ButtonLoader } from "~/app/_components/ui/button-loader";
+import { ok } from "~/app/_lib/ts-results";
+import { getBookingErrorMessage } from "~/server/types";
 
 type Props = {
   range: DateRange;
@@ -34,16 +35,14 @@ const formSchema = z.object({
   phone: z.string().regex(phoneRegex, "Invalid phone number"),
   verificationCode: z
     .string()
-    .min(6, "Invalid verification code")
+    .min(5, "Invalid verification code")
     .max(6, "Invalid verification code"),
 });
 
 export default function BookModal({ price, range, roomId }: Props) {
   const [state, formAction] = useFormState(
     createBooking.bind(null, { roomId, range }),
-    {
-      error: undefined,
-    },
+    ok({}),
   );
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -77,19 +76,21 @@ export default function BookModal({ price, range, roomId }: Props) {
       <Form {...form}>
         <form action={formAction}>
           <BookingFormInputs />
-          {!!state.error && (
-            <span className="mt-2 flex text-sm text-faily">{state.error}</span>
+          {state.err && (
+            <span className="mt-2 flex text-sm text-faily">
+              {getBookingErrorMessage(state.val)}
+            </span>
           )}
           <TabsContent value="pay">
             <input type="hidden" name="type" value={"pay"} />
             <DisplayPrice price={price} salePercent={5} />
-            <Button
+            <ButtonLoader
               variant="outline"
               className="mt-2 w-full"
               disabled={!form.formState.isValid}
             >
               Book
-            </Button>
+            </ButtonLoader>
             <span className="mt-4 flex w-full justify-center text-center text-sm">
               Pay now and get 5% discount
             </span>
@@ -97,13 +98,13 @@ export default function BookModal({ price, range, roomId }: Props) {
           <TabsContent value="reservation">
             <input type="hidden" name="type" value={"reservation"} />
             <DisplayPrice price={price} />
-            <Button
+            <ButtonLoader
               variant="outline"
               className="mt-2 w-full"
               disabled={!form.formState.isValid}
             >
               Make a reservation
-            </Button>
+            </ButtonLoader>
           </TabsContent>
         </form>
       </Form>

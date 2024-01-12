@@ -69,7 +69,7 @@ export default function BookingCalendar({
       );
 
       if (isBlocked) {
-        return;
+        return setRange(undefined);
       }
     }
 

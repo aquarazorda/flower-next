@@ -147,4 +147,6 @@ model Reservation {
   dateTo      DateTime
   error       String?
   type        ReservationType
+  createdAt   DateTime          @default(now())
+  paymentId   String?
 }

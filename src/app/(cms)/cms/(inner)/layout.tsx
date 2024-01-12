@@ -60,6 +60,15 @@ export default async function RootLayout({
                     <BookText className="mr-2 h-4 w-4" /> Bookings
                   </Link>
                 </Button>
+                <Button
+                  asChild
+                  variant="ghost"
+                  className="w-full justify-start"
+                >
+                  <Link href="/cms/bookings-otelms">
+                    <BookText className="mr-2 h-4 w-4" /> Otelms Bookings
+                  </Link>
+                </Button>
               </div>
             </div>
             <div className="flex w-full overflow-y-auto">{children}</div>

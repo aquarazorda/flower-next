@@ -9,10 +9,12 @@ export function isDateRangeBlocked(
   targetRange: DateRange,
   blockedDates: DateRange[],
 ): boolean {
+  const compareRange = { start: targetRange.from, end: targetRange.to };
+
   return blockedDates.some((blockedRange) =>
-    areIntervalsOverlapping(
-      { start: targetRange.from, end: targetRange.to },
-      { start: blockedRange.from, end: blockedRange.to },
-    ),
+    areIntervalsOverlapping(compareRange, {
+      start: blockedRange.from,
+      end: blockedRange.to,
+    }),
   );
 }

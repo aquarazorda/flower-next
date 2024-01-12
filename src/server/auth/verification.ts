@@ -54,7 +54,7 @@ ${verificationCode}
     await db.verifiedEmail.upsert({
       where: { email },
       create: { email, verificationCode: String(verificationCode) },
-      update: { verificationCode: String(verificationCode), status: "pending" },
+      update: { verificationCode: String(verificationCode), status: "PENDING" },
     });
 
     await sgMail.send(msg);

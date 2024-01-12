@@ -6,17 +6,11 @@ import { z } from "zod";
 import { capitalizeFirst, phoneRegex } from "~/app/_lib/clipboard";
 import { db } from "./db";
 import { calculatePrices } from "~/app/_lib/utils";
-import { err, ok } from "~/app/_lib/ts-results";
+import { Either, err, ok } from "~/app/_lib/ts-results";
 import { isDateRangeBlocked } from "~/app/_lib/date";
 import { parseISO } from "date-fns";
-
-enum BookingError {
-  INVALID_VERIFICATION_CODE,
-  GENERIC,
-  INVALID_ROOM,
-  PRICE_MISMATCH,
-  DATES_NOT_AVAILABLE,
-}
+import { BookingError } from "./types";
+import { getDiscountedPrice } from "~/app/_lib/prices";
 
 const formSchema = zfd.formData({
   type: zfd.text(z.enum(["pay", "reservation"])),
@@ -27,24 +21,23 @@ const formSchema = zfd.formData({
   verificationCode: zfd.text(
     z
       .string()
-      .min(6, "verification code is required")
+      .min(5, "verification code is required")
       .max(6, "invalid verification code"),
   ),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
 
+type DataProp = {
+  roomId: string;
+  range: DateRange;
+};
+
 export async function createBooking(
-  {
-    roomId,
-    range,
-  }: {
-    roomId: string;
-    range: DateRange;
-  },
+  { roomId, range }: DataProp,
   previousState: { error?: string },
   formData: FormData,
-) {
+): Promise<Either<BookingError | string, {}>> {
   const parsed = formSchema.safeParse(formData);
 
   if (!range.from || !range.to) {
@@ -61,39 +54,40 @@ export async function createBooking(
 
   const data = parsed.data;
 
-  const [{ id: reservationId }, emailRes] = await db.$transaction([
-    db.reservation.create({
-      data: {
-        email: data.email,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        phoneNumber: data.phone,
-        dateFrom: range.from,
-        dateTo: range.to,
-        roomId: Number(roomId),
-      },
-      select: {
-        id: true,
-      },
-    }),
-    db.verifiedEmail.findFirst({
-      where: {
-        email: data.email,
-      },
-      select: {
-        verificationCode: true,
-      },
-    }),
-  ]);
-
-  if (!emailRes || emailRes.verificationCode !== data.verificationCode) {
-    return await saveError(
-      reservationId,
-      BookingError.INVALID_VERIFICATION_CODE,
-    );
-  }
-
   try {
+    const [{ id: reservationId }, emailRes] = await db.$transaction([
+      db.reservation.create({
+        data: {
+          type: data.type === "pay" ? "PAYMENT" : "RESERVATION",
+          email: data.email,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          phoneNumber: data.phone,
+          dateFrom: range.from,
+          dateTo: range.to,
+          roomId: Number(roomId),
+        },
+        select: {
+          id: true,
+        },
+      }),
+      db.verifiedEmail.findFirst({
+        where: {
+          email: data.email,
+        },
+        select: {
+          verificationCode: true,
+        },
+      }),
+    ]);
+
+    if (!emailRes || emailRes.verificationCode !== data.verificationCode) {
+      return await saveError(
+        reservationId,
+        BookingError.INVALID_VERIFICATION_CODE,
+      );
+    }
+
     await db.verifiedEmail.update({
       where: {
         email: data.email,
@@ -105,22 +99,35 @@ export async function createBooking(
 
     const validationResult = await validateReservation(
       reservationId,
+      data.type,
       range,
       roomId,
     );
 
     if (validationResult.err) {
-      return err;
+      return validationResult;
     }
+
+    const dbRes = await db.reservation.update({
+      where: {
+        id: reservationId,
+      },
+      data: {
+        status: data.type === "pay" ? "PAID" : "RESERVED",
+        price: validationResult.val.price,
+        error: null,
+      },
+    });
+
+    return ok({});
   } catch (e) {
     return err(BookingError.GENERIC);
   }
-
-  return ok({});
 }
 
 const validateReservation = async (
   reservationId: string,
+  type: "pay" | "reservation",
   range: DateRange,
   roomId: string,
 ) => {
@@ -163,7 +170,7 @@ const validateReservation = async (
     correctedDates,
   );
 
-  if (!isNotAvailable) {
+  if (isNotAvailable) {
     return await saveError(reservationId, BookingError.DATES_NOT_AVAILABLE);
   }
 
@@ -173,7 +180,10 @@ const validateReservation = async (
     return await saveError(reservationId, BookingError.PRICE_MISMATCH);
   }
 
-  return ok({});
+  return ok({
+    price: type === "pay" ? getDiscountedPrice(price, 5) : price,
+    dates,
+  });
 };
 
 const createReservation = async (
