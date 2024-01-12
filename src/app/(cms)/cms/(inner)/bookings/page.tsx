@@ -98,7 +98,9 @@ export default async function Bookings() {
               <TableCell>
                 <Badge className="max-w-16 overflow-hidden text-ellipsis bg-slate-100 text-black hover:text-white">
                   <WithTooltip>
-                    {booking.error} - {getBookingErrorMessage(booking.error)}
+                    {booking.error}{" "}
+                    {booking.error &&
+                      "-" + getBookingErrorMessage(booking.error)}
                   </WithTooltip>
                 </Badge>
               </TableCell>

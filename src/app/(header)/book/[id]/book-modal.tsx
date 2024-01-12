@@ -41,6 +41,7 @@ const formSchema = z.object({
 
 export default function BookModal({ price, range, roomId }: Props) {
   const [state, formAction] = useFormState(
+    // @ts-ignore
     createBooking.bind(null, { roomId, range }),
     ok({}),
   );

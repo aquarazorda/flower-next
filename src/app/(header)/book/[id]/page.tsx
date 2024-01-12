@@ -1,10 +1,9 @@
 import { api } from "~/trpc/server";
 import RoomSlider from "./slider";
 import { redirect } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
 import { CancelRounded } from "~/app/_assets/icons/CancelRounded";
 import { CheckRounded } from "~/app/_assets/icons/CheckRounded";
-import BookingCalendar from "./calendar";
 import { cn } from "~/app/_lib/utils";
 import { inter } from "~/app/_styles/fonts";
 
@@ -13,6 +12,8 @@ type Props = {
 };
 
 export const dynamic = "force-dynamic";
+
+const BookingCalendar = lazy(() => import("./calendar"));
 
 export async function generateMetadata({ params }: Props) {
   const data = await api.room.getRoom.query(params.id);
