@@ -37,7 +37,7 @@ export default async function RootLayout({
       >
         <TRPCReactProvider cookies={cookies().toString()}>
           <div className="relative m-11 flex h-[90dvh] rounded-md border">
-            <div className="border-r px-3 py-2">
+            <div className="max-w-56 border-r px-3 py-2">
               <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
                 Rooms
               </h2>

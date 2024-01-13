@@ -7,18 +7,19 @@ import { cn } from "~/app/_lib/utils";
 export const ButtonLoader = ({
   children,
   className,
+  isLoading,
   ...props
-}: ButtonProps) => {
+}: ButtonProps & { isLoading?: boolean }) => {
   const { pending } = useFormStatus();
 
   return (
     <Button
       {...props}
       variant="outline"
-      disabled={pending || props.disabled}
+      disabled={isLoading !== undefined ? isLoading : pending || props.disabled}
       className={cn("flex items-center gap-2", className)}
     >
-      {pending && (
+      {(isLoading !== undefined ? isLoading : pending) && (
         <svg
           aria-hidden="true"
           className="inline h-4 w-4 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "~/app/_components/ui/button";
+import { ButtonLoader } from "~/app/_components/ui/button-loader";
 import {
   FormControl,
   FormField,
@@ -124,7 +125,7 @@ export default function BookingFormInputs() {
                     Resend in {codeTimer}s
                   </Button>
                 ) : (
-                  <Button
+                  <ButtonLoader
                     type="button"
                     className="bg-secondaryHover hover:bg-secondaryHover/80"
                     disabled={
@@ -132,12 +133,13 @@ export default function BookingFormInputs() {
                       form.formState.isSubmitting ||
                       emailVerificationMutation.isLoading
                     }
+                    isLoading={emailVerificationMutation.isLoading}
                     onClick={() =>
                       emailVerificationMutation.mutate(field.value)
                     }
                   >
                     Validate
-                  </Button>
+                  </ButtonLoader>
                 )}
               </div>
             </FormItem>
