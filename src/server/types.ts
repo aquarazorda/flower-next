@@ -6,6 +6,7 @@ export enum BookingError {
   INVALID_ROOM = "INVALID_ROOM",
   PRICE_MISMATCH = "PRICE_MISMATCH",
   DATES_NOT_AVAILABLE = "DATES_NOT_AVAILABLE",
+  OTELMS_ERROR = "OTELMS_ERROR",
 }
 
 export const getBookingErrorMessage = (error: BookingError | string) =>
@@ -21,6 +22,7 @@ export const getBookingErrorMessage = (error: BookingError | string) =>
     .with(
       BookingError.PRICE_MISMATCH,
       BookingError.INVALID_ROOM,
+      BookingError.OTELMS_ERROR,
       BookingError.GENERIC,
       () => "Something went wrong, please try again",
     )

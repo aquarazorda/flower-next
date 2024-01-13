@@ -11,6 +11,7 @@ import { isDateRangeBlocked } from "~/app/_lib/date";
 import { parseISO } from "date-fns";
 import { BookingError } from "./types";
 import { getDiscountedPrice } from "~/app/_lib/prices";
+import { saveMsBooking } from "./otelms/bookings";
 
 const formSchema = zfd.formData({
   type: zfd.text(z.enum(["pay", "reservation"])),
@@ -108,7 +109,7 @@ export async function createBooking(
       return validationResult;
     }
 
-    const dbRes = await db.reservation.update({
+    await db.reservation.update({
       where: {
         id: reservationId,
       },
@@ -117,6 +118,20 @@ export async function createBooking(
         price: validationResult.val.price,
         error: null,
       },
+    });
+
+    const res = await saveMsBooking({
+      dateRange: validationResult.val.range,
+      price: validationResult.val.price,
+      type: data.type,
+      msId: validationResult.val.msId,
+      user: {
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        phoneNumber: data.phone,
+      },
+      reservationId,
     });
 
     return ok({});
@@ -146,12 +161,20 @@ const validateReservation = async (
           list: true,
         },
       },
+      info: {
+        select: {
+          msId: true,
+        },
+      },
     },
   });
+
+  console.log(roomData);
 
   if (
     !roomData ||
     !roomData.prices?.list ||
+    !roomData.info?.msId ||
     !roomData.blockedDate ||
     !range.from ||
     !range.to
@@ -183,6 +206,8 @@ const validateReservation = async (
   return ok({
     price: type === "pay" ? getDiscountedPrice(price, 5) : price,
     dates,
+    msId: roomData.info.msId,
+    range: range as { from: Date; to: Date },
   });
 };
 

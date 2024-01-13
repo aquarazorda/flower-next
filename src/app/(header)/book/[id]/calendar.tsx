@@ -52,7 +52,16 @@ export default function BookingCalendar({
 
   const maxDate = useMemo(() => {
     if (!pricesList) return new Date();
-    const keys = Object.keys(pricesList);
+    const keys = Object.keys(pricesList).sort((a, b) => {
+      const [monthA, yearA] = a.split("-");
+      const [monthB, yearB] = b.split("-");
+
+      const dateA = `${yearA}-${monthA}`;
+      const dateB = `${yearB}-${monthB}`;
+
+      return dateA.localeCompare(dateB);
+    });
+
     const price = keys[keys.length - 1];
     if (!price) {
       return new Date();
@@ -80,6 +89,7 @@ export default function BookingCalendar({
     <div className="flex h-full flex-col justify-center">
       <Calendar
         mode="range"
+        className="pb-0"
         onSelect={(range) => onSelect(range)}
         selected={range}
         fromDate={new Date()}
@@ -92,7 +102,7 @@ export default function BookingCalendar({
           <DialogTrigger asChild>
             <Button
               variant="outline"
-              className="mt-6 w-full text-xs"
+              className="w-full text-xs"
               disabled={!range?.to || !range?.from || !price}
             >
               Book Now

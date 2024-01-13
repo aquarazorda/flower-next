@@ -25,6 +25,7 @@ export default function EditRoomInformation({ room }: Props) {
       persons: zfd.numeric(z.number().positive()),
       description: zfd.text(),
       extraPerson: zfd.checkbox(),
+      msId: zfd.numeric(z.number().positive()),
     });
 
     const data = schema.safeParse(formData);
@@ -56,6 +57,15 @@ export default function EditRoomInformation({ room }: Props) {
           id="persons"
           name="persons"
           defaultValue={room?.info?.persons || 0}
+        />
+      </div>
+      <div className="grid w-full max-w-sm items-center gap-1.5">
+        <Label htmlFor="persons">Room ID</Label>
+        <Input
+          type="number"
+          id="msId"
+          name="msId"
+          defaultValue={room?.info?.msId || 0}
         />
       </div>
       <Textarea
