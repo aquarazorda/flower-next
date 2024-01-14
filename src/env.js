@@ -19,6 +19,8 @@ export const env = createEnv({
       .default("development"),
     MS_URL: z.string().url(),
     SENDGRID_KEY: z.string(),
+    TG_BOT_TOKEN: z.string(),
+    TG_CHAT_ID: z.string(),
   },
 
   /**
@@ -39,6 +41,8 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     MS_URL: process.env.MS_URL,
     SENDGRID_KEY: process.env.SENDGRID_KEY,
+    TG_BOT_TOKEN: process.env.TG_BOT_TOKEN,
+    TG_CHAT_ID: process.env.TG_CHAT_ID,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

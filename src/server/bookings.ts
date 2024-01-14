@@ -12,6 +12,7 @@ import { parseISO } from "date-fns";
 import { BookingError } from "./types";
 import { getDiscountedPrice } from "~/app/_lib/prices";
 import { saveMsBooking } from "./otelms/bookings";
+import { sendTelegramMessage } from "./telegram";
 
 const formSchema = zfd.formData({
   type: zfd.text(z.enum(["pay", "reservation"])),
@@ -133,6 +134,11 @@ export async function createBooking(
       },
       reservationId,
     });
+
+    if (res.ok) {
+      sendTelegramMessage(`Reservation confirmed, reservation id - ${reservationId}, otelms booking id - ${res.val}
+      <br /> ${data.firstName} ${data.lastName} booked ${data.roomId} from ${format(range.from, "yyyy-MM-dd")} to ${format(range.to, "yyyy-MM-dd")} for ${price} GEL`);
+    }
 
     return res;
   } catch (e) {
