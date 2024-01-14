@@ -57,7 +57,16 @@ export default async function RootLayout({
                   className="w-full justify-start"
                 >
                   <Link href="/cms/bookings">
-                    <BookText className="mr-2 h-4 w-4" /> Bookings
+                    <BookText className="mr-2 h-4 w-4" /> Confirmed Bookings
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  variant="ghost"
+                  className="w-full justify-start"
+                >
+                  <Link href="/cms/bookings/pending">
+                    <BookText className="mr-2 h-4 w-4" /> Pending Bookings
                   </Link>
                 </Button>
                 <Button
