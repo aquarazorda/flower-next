@@ -37,10 +37,14 @@ export const ReservationsTable = async ({ pending }: { pending?: boolean }) => {
   return (
     <div className="flex w-full flex-col gap-4">
       <Table>
-        <ReservationTableHeaders />
+        <ReservationTableHeaders withError={pending} />
         <TableBody className="auto-cols-max grid-flow-col">
           {data.map((booking) => (
-            <ReservationTableItemData booking={booking} key={booking.id} />
+            <ReservationTableItemData
+              withError={pending}
+              booking={booking}
+              key={booking.id}
+            />
           ))}
         </TableBody>
       </Table>
