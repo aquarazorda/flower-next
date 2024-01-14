@@ -51,13 +51,18 @@ export default async function RootLayout({
                     <AlignJustify className="mr-2 h-4 w-4" /> List
                   </Link>
                 </Button>
+              </div>
+              <h2 className="mb-2 mt-4 px-4 text-lg font-semibold tracking-tight">
+                Bookings
+              </h2>
+              <div className="space-y-1">
                 <Button
                   asChild
                   variant="ghost"
                   className="w-full justify-start"
                 >
                   <Link href="/cms/bookings">
-                    <BookText className="mr-2 h-4 w-4" /> Confirmed Bookings
+                    <BookText className="mr-2 h-4 w-4" /> Confirmed
                   </Link>
                 </Button>
                 <Button
@@ -66,7 +71,7 @@ export default async function RootLayout({
                   className="w-full justify-start"
                 >
                   <Link href="/cms/bookings/pending">
-                    <BookText className="mr-2 h-4 w-4" /> Pending Bookings
+                    <BookText className="mr-2 h-4 w-4" /> Pending
                   </Link>
                 </Button>
                 <Button
@@ -74,8 +79,8 @@ export default async function RootLayout({
                   variant="ghost"
                   className="w-full justify-start"
                 >
-                  <Link href="/cms/bookings-otelms">
-                    <BookText className="mr-2 h-4 w-4" /> Otelms Bookings
+                  <Link href="/cms/bookings/otelms">
+                    <BookText className="mr-2 h-4 w-4" /> Otelms
                   </Link>
                 </Button>
               </div>
