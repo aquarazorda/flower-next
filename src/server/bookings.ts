@@ -8,7 +8,7 @@ import { db } from "./db";
 import { calculatePrices } from "~/app/_lib/utils";
 import { Either, err, ok } from "~/app/_lib/ts-results";
 import { isDateRangeBlocked } from "~/app/_lib/date";
-import { parseISO } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { BookingError } from "./types";
 import { getDiscountedPrice } from "~/app/_lib/prices";
 import { saveMsBooking } from "./otelms/bookings";
@@ -137,7 +137,7 @@ export async function createBooking(
 
     if (res.ok) {
       sendTelegramMessage(`Reservation confirmed, reservation id - ${reservationId}, otelms booking id - ${res.val}
-      <br /> ${data.firstName} ${data.lastName} booked ${data.roomId} from ${format(range.from, "yyyy-MM-dd")} to ${format(range.to, "yyyy-MM-dd")} for ${price} GEL`);
+      <br /> ${data.firstName} ${data.lastName} booked ${roomId} from ${format(range.from, "yyyy-MM-dd")} to ${format(range.to, "yyyy-MM-dd")} for ${validationResult.price} GEL`);
     }
 
     return res;
