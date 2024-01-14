@@ -137,7 +137,7 @@ export async function createBooking(
 
     if (res.ok) {
       sendTelegramMessage(`Reservation confirmed, reservation id - ${reservationId}, otelms booking id - ${res.val}
-      <br /> ${data.firstName} ${data.lastName} booked ${roomId} from ${format(range.from, "yyyy-MM-dd")} to ${format(range.to, "yyyy-MM-dd")} for ${validationResult.price} GEL`);
+      <br /> ${data.firstName} ${data.lastName} booked ${roomId} from ${format(range.from, "yyyy-MM-dd")} to ${format(range.to, "yyyy-MM-dd")} for ${validationResult.val.price} GEL`);
     }
 
     return res;
