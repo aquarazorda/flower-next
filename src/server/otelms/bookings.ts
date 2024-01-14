@@ -1,9 +1,8 @@
 import { env } from "~/env";
 import { getCurrentDate, getFutureDate } from "~/app/_lib/utils";
 import { load } from "cheerio";
-import { intervalToDuration } from "date-fns";
-import { getDiscountedPrice, getOriginalPrice } from "~/app/_lib/prices";
-import { match } from "ts-pattern";
+import { format, intervalToDuration } from "date-fns";
+import { getOriginalPrice } from "~/app/_lib/prices";
 import { err, ok } from "~/app/_lib/ts-results";
 import { BookingError } from "../types";
 
@@ -22,7 +21,7 @@ export const getBookedDates = async () => {
     body.append("categories[]", String(i));
   }
 
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 4; i++) {
     body.append("statuses[]", String(i));
   }
 
@@ -105,61 +104,81 @@ type SaveMsBookingProps = {
 export const saveMsBooking = async (data: SaveMsBookingProps) => {
   const { MS_URL } = env;
 
-  const duration = intervalToDuration({
-    start: data.dateRange.from,
-    end: data.dateRange.to,
-  }).days;
-
   const headers = new Headers();
   headers.append("Content-Type", "application/x-www-form-urlencoded");
 
   const description = `${data.type === "reservation" ? "Reserved" : "Paid"} from the website, reservationId is ${data.reservationId}`;
+  const price = String(
+    data.type === "pay" ? getOriginalPrice(data.price, 5) : data.price,
+  );
 
   const body = new URLSearchParams();
+
   body.append("room_id", String(data.msId));
-  body.append("datein", data.dateRange.from.toISOString());
-  body.append("dateout", data.dateRange.to.toISOString());
+  body.append("datein", format(data.dateRange.from, "yyyy-MM-dd"));
+  body.append("dateout", format(data.dateRange.to, "yyyy-MM-dd"));
   body.append("hms_id", "0");
   body.append("insert_or_update_guest_id", "0");
-  body.append("room_id", String(data.msId));
   body.append("firstname", data.user.firstName);
   body.append("lastname", data.user.lastName);
-  body.append("middlename", "");
-  body.append("is_guest", "1");
   body.append("phone", data.user.phoneNumber);
   body.append("email", data.user.email);
-  body.append("datein", data.dateRange.from.toISOString());
+  body.append("use_dealer_discount", "1");
+  body.append("die_option", "0");
+  body.append("hotelid", "12228");
+  body.append("chainmode", "0");
+  body.append("chain_return_link", "0");
+  body.append("type_id", String(data.msId - 1));
+  body.append("sh", "1");
+  body.append("is_guest", "1");
+  body.append("dealer", "1");
+  body.append("marker_id", "3");
   body.append("checkintime", "13:30");
-  duration && body.append("duration", String(duration));
-  body.append("dateout", data.dateRange.to.toISOString());
   body.append("checkouttime", "12:00");
+  body.append("description", description);
+  body.append("service_main_amount_2", "1");
+  body.append("service_main_amount", price);
+  body.append("price_type", "1");
+  body.append("tourtax", "0");
+  body.append("percent_discount", "0");
+  body.append("discount", "-" + price);
   body.append("adults", "2");
   body.append("baby_places", "0");
   body.append("babyplace2", "0");
   body.append("addbedplace", "0");
-  body.append("service_main_amount_2", "0");
-  body.append("price_type", "1");
-  body.append("tourtax", "0");
   body.append(
-    "service_main_amount",
-    String(data.type === "pay" ? getOriginalPrice(data.price, 5) : data.price),
+    "duration",
+    String(
+      intervalToDuration({ start: data.dateRange.from, end: data.dateRange.to })
+        .days,
+    ),
   );
-  body.append("marker", "0");
   body.append("intgroupid", "");
-  body.append("dealer", "1");
-  body.append("user", "28");
-  body.append("description", description);
+  body.append("avoidtime_days", "");
+  body.append("avoidtime_hours", "");
+  body.append("avoidtime_minutes", "");
+  body.append("cardnumber", "");
+  body.append("exp_date", "");
+  body.append("cardholder", "");
+  body.append("cvc", "");
 
   try {
     const res = await fetch(MS_URL + "/reservations/save_modal", {
       method: "POST",
       headers,
       body,
-    });
+    })
+      .then((res) => res.text())
+      .then((res) => {
+        const data = JSON.parse(res);
+        if (data.ok === 1 && data.htmldiv) {
+          return ok(data.htmldiv.match(/resid="(\d+)"/)[1]);
+        }
 
-    console.log(await res.text());
+        return err(BookingError.OTELMS_ERROR);
+      });
 
-    return ok({ reservationId: data.reservationId });
+    return res;
   } catch (e) {
     return err(BookingError.OTELMS_ERROR);
   }

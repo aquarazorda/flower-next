@@ -134,7 +134,7 @@ export async function createBooking(
       reservationId,
     });
 
-    return ok({});
+    return res;
   } catch (e) {
     return err(BookingError.GENERIC);
   }
@@ -168,8 +168,6 @@ const validateReservation = async (
       },
     },
   });
-
-  console.log(roomData);
 
   if (
     !roomData ||

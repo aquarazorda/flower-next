@@ -10,10 +10,12 @@ export const otelmsRouter = createTRPCRouter({
       return [];
     }
 
-    await ctx.db.blockedDate.deleteMany();
-    await ctx.db.blockedDate.createMany({
-      data,
-    });
+    await ctx.db.$transaction([
+      ctx.db.blockedDate.deleteMany({}),
+      ctx.db.blockedDate.createMany({
+        data,
+      }),
+    ]);
 
     return data;
   }),
