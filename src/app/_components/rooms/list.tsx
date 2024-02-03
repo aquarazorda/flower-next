@@ -9,7 +9,7 @@ type Props = {
 export default function RoomsList({ rooms }: Props) {
   console.log(rooms.map(({ info }) => info?.pictures));
   return (
-    <div className="lg:mb-24 lg:mt-12 lg:px-[5%]">
+    <div className="lg:mb-24 lg:px-[5%]">
       {/* <RoomsFilter /> */}
       <main className="my-10 flex flex-wrap justify-center gap-10 px-7 lg:grid lg:grid-cols-5 lg:gap-6">
         {rooms.map((room) => (

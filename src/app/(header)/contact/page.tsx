@@ -23,7 +23,7 @@ export default function ContactPage() {
   const copy = useCopyText();
 
   return (
-    <div className="flex flex-col lg:mt-12 lg:flex-row lg:py-20">
+    <div className="flex flex-col lg:flex-row lg:py-20">
       <div className="h-96 flex-1 p-6 lg:h-[60dvh]">
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2979.436417580777!2d44.79803947643907!3d41.68951357720013!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40440cf2358c2f91%3A0xc0d3daaf99fd2b62!2sHotel%20Flower!5e0!3m2!1sen!2sge!4v1703108979366!5m2!1sen!2sge"

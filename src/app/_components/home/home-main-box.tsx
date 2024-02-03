@@ -40,6 +40,9 @@ export default function HomeMainBox() {
         <div className="absolute inset-0 z-10 bg-mobile-gradient xl:bg-landing-gradient" />
         <motion.h1
           layout
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
           style={{ top: `${scrollPercent + 40}%` }}
           className="absolute z-20 hidden bg-text-gradient bg-clip-text p-2 text-center text-6xl uppercase leading-extra-tight text-transparent transition lg:block"
         >
