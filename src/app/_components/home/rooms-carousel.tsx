@@ -6,6 +6,7 @@ import { useIsMobile } from "~/app/_hooks/useIsMobile";
 import { RouterOutputs } from "~/trpc/shared";
 import LazyImage from "../lazy-image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 type Props = {
   rooms: RouterOutputs["room"]["get"];
@@ -26,39 +27,60 @@ export default function RoomsCarousel({ rooms }: Props) {
         ref={emblaRef}
         className="embla cursor-pointer overflow-hidden pl-4 lg:pl-4"
       >
-        <div className="embla__container flex lg:ml-28">
+        <motion.div
+          variants={{
+            hidden: {
+              opacity: 0,
+            },
+            show: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.1,
+              },
+            },
+          }}
+          initial="hidden"
+          animate="show"
+          className="embla__container flex lg:ml-28"
+        >
           {rooms.map((room, idx) => (
-            <Link
-              href={"/book/" + room.roomId}
-              prefetch={false}
-              key={room.id}
-              style={{ aspectRatio: isMobile ? "9.4/10" : "" }}
+            <motion.div
               className="embla__slide relative mr-2 h-32 w-[123px] text-sm text-white lg:mr-8 lg:aspect-square lg:h-[264px] lg:w-fit"
+              key={room.id}
+              variants={{
+                hidden: {
+                  opacity: 0,
+                },
+                show: { opacity: 1 },
+              }}
+              style={{ aspectRatio: isMobile ? "9.4/10" : "" }}
             >
-              {idx < 5 ? (
-                <Image
-                  src={`/images/rooms/${
-                    // @ts-ignore
-                    room.info?.pictures?.[0] || 0
-                  }`}
-                  className="rounded-lg object-cover"
-                  alt={room.name}
-                  fill={true}
-                />
-              ) : (
-                <LazyImage
-                  src={`/images/rooms/${
-                    // @ts-ignore
-                    room.info?.pictures?.[0] || 0
-                  }`}
-                  className="rounded-lg object-cover"
-                  alt={room.name}
-                  fill={true}
-                />
-              )}
-            </Link>
+              <Link href={"/book/" + room.roomId} prefetch={false}>
+                {idx < 5 ? (
+                  <Image
+                    src={`/images/rooms/${
+                      // @ts-ignore
+                      room.info?.pictures?.[0] || 0
+                    }`}
+                    className="rounded-lg object-cover"
+                    alt={room.name}
+                    fill={true}
+                  />
+                ) : (
+                  <LazyImage
+                    src={`/images/rooms/${
+                      // @ts-ignore
+                      room.info?.pictures?.[0] || 0
+                    }`}
+                    className="rounded-lg object-cover"
+                    alt={room.name}
+                    fill={true}
+                  />
+                )}
+              </Link>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
       <div className="mb-10 mt-6 flex flex-col p-4 lg:my-24 lg:mb-28 lg:items-center lg:pt-2">
         <span className="text-center text-[12.5px] text-primary lg:max-w-2xl lg:text-base lg:text-primary/90">

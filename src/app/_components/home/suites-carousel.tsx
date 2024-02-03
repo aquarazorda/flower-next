@@ -5,9 +5,11 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import useEmblaCarousel from "embla-carousel-react";
 import { useIsMobile } from "~/app/_hooks/useIsMobile";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SliderDots from "../slider-dots";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { useScrollUpAnimation } from "~/app/_animations/scroll";
 
 type Props = {
   suites: RouterOutputs["room"]["get"];
@@ -15,11 +17,13 @@ type Props = {
 
 export default function SuitesCarousel({ suites }: Props) {
   const isMobile = useIsMobile();
+  const router = useRouter();
+  const animationProps = useScrollUpAnimation();
+
   const [emblaRef, emblaApi] = useEmblaCarousel({
     axis: isMobile ? "x" : "y",
   });
   const [currSlideIndex, setCurrSlideIndex] = useState(0);
-  const router = useRouter();
 
   useEffect(() => {
     emblaApi?.on("select", ({ selectedScrollSnap }) =>
@@ -34,7 +38,7 @@ export default function SuitesCarousel({ suites }: Props) {
   }, [emblaApi, isMobile]);
 
   return (
-    <div className="flex flex-col lg:mt-28 lg:px-32">
+    <motion.div className="flex flex-col lg:mt-28 lg:px-32" {...animationProps}>
       <h5 className="mb-8 text-center font-shippori text-base font-medium text-neutral-500 lg:hidden lg:text-primary/90">
         Suites
       </h5>
@@ -88,6 +92,6 @@ export default function SuitesCarousel({ suites }: Props) {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

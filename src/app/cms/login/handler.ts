@@ -6,7 +6,6 @@ import { redirect } from "next/navigation";
 import { LuciaError } from "lucia";
 import { cookies } from "next/headers";
 import { zfd } from "zod-form-data";
-import { revalidatePath } from "next/cache";
 
 const authSchema = zfd.formData({
   username: zfd.text(),

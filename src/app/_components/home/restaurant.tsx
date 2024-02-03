@@ -1,8 +1,14 @@
+"use client";
+
+import { motion } from "framer-motion";
 import Image from "next/image";
+import { useScrollUpAnimation } from "~/app/_animations/scroll";
 
 export default function Restaurant() {
+  const animationProps = useScrollUpAnimation();
+
   return (
-    <div className="mt-14 text-xs lg:mt-32">
+    <motion.div className="mt-14 text-xs lg:mt-32" {...animationProps}>
       <h5 className="mb-8 text-center text-base font-medium text-primary lg:mb-16 lg:text-2xl lg:font-normal">
         Restaurant
       </h5>
@@ -24,6 +30,6 @@ export default function Restaurant() {
           cityscape haven!
         </span>
       </span>
-    </div>
+    </motion.div>
   );
 }
