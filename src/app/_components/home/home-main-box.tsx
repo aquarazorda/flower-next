@@ -1,38 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
-import { useIsMobile } from "~/app/_hooks/useIsMobile";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
-const maxPercent = 35;
+const MotionImage = motion(Image);
 
 export default function HomeMainBox() {
-  const [scrollY, setScrollY] = useState(0);
-  const isMobile = useIsMobile();
-
-  const scrollPercent = useMemo(() => {
-    if (!scrollY || isMobile) return 0;
-
-    if (scrollY < window.innerHeight) {
-      const percent = Math.floor((scrollY * 100) / window.innerHeight);
-      if (percent <= maxPercent) {
-        return percent;
-      }
-    }
-
-    return maxPercent;
-  }, [scrollY]);
-
-  useEffect(() => {
-    setScrollY(window.scrollY);
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const imageRef = useRef(null);
+  const { scrollY } = useScroll();
+  const transform = useTransform(scrollY, [0, 800], [1, 1.4]);
 
   return (
     <div className="h-[50vh] xl:h-[58vh]">
@@ -43,21 +20,24 @@ export default function HomeMainBox() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.2 }}
-          style={{ top: `${scrollPercent + 40}%` }}
           className="absolute z-20 hidden bg-text-gradient bg-clip-text p-2 text-center text-6xl uppercase leading-extra-tight text-transparent transition lg:block"
         >
           Hotel
           <br />
           Flower
         </motion.h1>
-        <Image
-          alt="Hotel Flower Hero Image"
-          src="/images/main-desktop.webp"
-          className="z-0 h-full w-full object-cover"
-          fill={true}
-          priority
-          loading="eager"
-        />
+        <div className="relative h-full w-full overflow-hidden">
+          <MotionImage
+            ref={imageRef}
+            alt="Hotel Flower Hero Image"
+            src="/images/main-desktop.webp"
+            className="z-0 h-full w-full object-cover"
+            style={{ scale: transform }}
+            fill={true}
+            priority
+            loading="eager"
+          />
+        </div>
       </div>
     </div>
   );

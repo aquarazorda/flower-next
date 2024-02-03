@@ -12,7 +12,7 @@ export default function DesktopHeader() {
 
   return (
     <>
-      <div className="h-14 w-full xl:flex" />
+      <div className="hidden h-14 w-full lg:flex" />
       <header
         className={cn(
           isScrolled && "bg-opacity-80 shadow-gray-500",
