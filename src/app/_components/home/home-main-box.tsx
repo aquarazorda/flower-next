@@ -32,6 +32,7 @@ export default function HomeMainBox() {
             alt="Hotel Flower Hero Image"
             src="/images/main-desktop.webp"
             className="z-0 h-full w-full object-cover"
+            // @ts-ignore
             style={{ scale: transform }}
             fill={true}
             priority
