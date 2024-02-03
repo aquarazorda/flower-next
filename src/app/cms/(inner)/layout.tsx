@@ -3,7 +3,6 @@ import "~/app/_styles/globals.css";
 import { cookies } from "next/headers";
 import { TRPCReactProvider } from "~/trpc/react";
 import { Metadata } from "next";
-import { inter } from "../../../_styles/fonts";
 import { auth } from "~/server/auth/lucia";
 import * as context from "next/headers";
 import { redirect } from "next/navigation";
@@ -11,6 +10,7 @@ import { Button } from "~/app/_components/ui/button";
 import { Toaster } from "~/app/_components/ui/toaster";
 import { AlignJustify, BookText } from "lucide-react";
 import Link from "next/link";
+import { inter } from "~/app/_styles/fonts";
 
 export const metadata: Metadata = {
   title: "Hotel Flower - CMS",

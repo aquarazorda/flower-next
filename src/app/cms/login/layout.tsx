@@ -2,7 +2,7 @@ import "~/app/_styles/globals.css";
 
 import { cookies } from "next/headers";
 import { TRPCReactProvider } from "~/trpc/react";
-import { inter } from "../../../_styles/fonts";
+import { inter } from "~/app/_styles/fonts";
 
 export default function RootLayout({
   children,
