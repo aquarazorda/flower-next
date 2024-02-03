@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { useIsMobile } from "~/app/_hooks/useIsMobile";
+import { motion } from "framer-motion";
 
 const maxPercent = 35;
 
@@ -14,7 +15,7 @@ export default function HomeMainBox() {
     if (!scrollY || isMobile) return 0;
 
     if (scrollY < window.innerHeight) {
-      const percent = (scrollY * 100) / window.innerHeight;
+      const percent = Math.floor((scrollY * 100) / window.innerHeight);
       if (percent <= maxPercent) {
         return percent;
       }
@@ -37,14 +38,15 @@ export default function HomeMainBox() {
     <div className="h-[50vh] xl:h-[58vh]">
       <div className="relative mt-auto flex h-full flex-col items-center justify-center gap-12 lg:h-full lg:gap-0">
         <div className="absolute inset-0 z-10 bg-mobile-gradient xl:bg-landing-gradient" />
-        <h1
+        <motion.h1
+          layout
           style={{ top: `${scrollPercent + 40}%` }}
           className="absolute z-20 hidden bg-text-gradient bg-clip-text p-2 text-center text-6xl uppercase leading-extra-tight text-transparent transition lg:block"
         >
           Hotel
           <br />
           Flower
-        </h1>
+        </motion.h1>
         <Image
           alt="Hotel Flower Hero Image"
           src="/images/main-desktop.webp"

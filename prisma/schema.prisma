@@ -20,11 +20,12 @@ model Room {
   info            RoomInfo?
   type            String
   priceAdjustment PriceAdjustment?
+  Reservation     Reservation[]
 }
 
 model RoomInfo {
   id          Int      @id @default(autoincrement())
-  msId        Int?      @unique
+  msId        Int?     @unique
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   roomId      Int      @unique
@@ -144,10 +145,13 @@ model Reservation {
   status      ReservationStatus @default(PENDING)
   price       Int               @default(0)
   roomId      Int
+  room        Room?             @relation(fields: [roomId], references: [roomId])
   dateFrom    DateTime
   dateTo      DateTime
   error       String?
   type        ReservationType
   createdAt   DateTime          @default(now())
   paymentId   String?
+
+  @@index([roomId])
 }

@@ -4,12 +4,10 @@ import { Copy } from "lucide-react";
 import Instagram from "~/app/_assets/icons/Instagram";
 import Phone from "~/app/_assets/icons/Phone";
 import { Button } from "~/app/_components/ui/button";
-import { Input } from "~/app/_components/ui/input";
 import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableRow,
 } from "~/app/_components/ui/table";
 import { useCopyText } from "~/app/_lib/clipboard";
