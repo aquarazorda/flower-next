@@ -74,6 +74,9 @@ dependencies:
   date-fns:
     specifier: 3.3.1
     version: 3.3.1
+  dnd-core:
+    specifier: ^16.0.1
+    version: 16.0.1
   embla-carousel-react:
     specifier: ^8.0.0-rc22
     version: 8.0.0-rc22(react@18.2.0)
