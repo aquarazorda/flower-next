@@ -7,6 +7,7 @@ type Props = {
 };
 
 export default function RoomsList({ rooms }: Props) {
+  console.log(rooms.map(({ info }) => info?.pictures));
   return (
     <div className="lg:mb-24 lg:mt-12 lg:px-[5%]">
       {/* <RoomsFilter /> */}
@@ -21,10 +22,10 @@ export default function RoomsList({ rooms }: Props) {
               <Image
                 alt={room.name}
                 fill={true}
-                src={`/images/${room.roomId}/${
+                src={`/images/rooms/${
                   // @ts-ignore
                   room.info?.pictures?.[0] || 0
-                }-desktop.webp`}
+                }`}
                 // onClick={() => navigate(`./${room.roomId}`)}
                 className="cursor-pointer rounded-2xl object-cover object-center"
               />

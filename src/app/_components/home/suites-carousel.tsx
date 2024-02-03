@@ -56,10 +56,10 @@ export default function SuitesCarousel({ suites }: Props) {
                     alt={room.name}
                     fill={true}
                     onClick={() => router.push("/suites/" + room.roomId)}
-                    src={`/images/${room.roomId}/${
+                    src={`/images/rooms/${
                       // @ts-ignore
                       room.info?.pictures?.[0] || 0
-                    }-desktop.webp`}
+                    }`}
                     className="block h-full w-full object-cover lg:rounded-md"
                   />
                 ) : null}

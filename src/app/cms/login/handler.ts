@@ -1,22 +1,19 @@
 "use server";
+
 import { Err } from "ts-results";
 import { auth } from "~/server/auth/lucia";
 import { redirect } from "next/navigation";
 import { LuciaError } from "lucia";
 import { cookies } from "next/headers";
-import {
-  RedirectType,
-  isRedirectError,
-} from "next/dist/client/components/redirect";
-import { revalidateTag } from "next/cache";
 import { zfd } from "zod-form-data";
+import { revalidatePath } from "next/cache";
 
 const authSchema = zfd.formData({
   username: zfd.text(),
   password: zfd.text(),
 });
 
-export async function login(data: FormData) {
+export default async function login(data: FormData) {
   const res = authSchema.safeParse(data);
   if (!res.success) {
     return Err("invalid data");
@@ -40,10 +37,6 @@ export async function login(data: FormData) {
       ...sessionCookie.attributes,
     });
   } catch (e) {
-    if (isRedirectError(e)) {
-      redirect("/cms");
-    }
-
     if (
       e instanceof LuciaError &&
       (e.message === "AUTH_INVALID_KEY_ID" ||
@@ -54,5 +47,5 @@ export async function login(data: FormData) {
     return Err("An unknown error occurred");
   }
 
-  return redirect("/cms");
+  redirect("/cms/bookings");
 }

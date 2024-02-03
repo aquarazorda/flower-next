@@ -37,20 +37,20 @@ export default function RoomsCarousel({ rooms }: Props) {
             >
               {idx < 5 ? (
                 <Image
-                  src={`/images/${room.roomId}/${
+                  src={`/images/rooms/${
                     // @ts-ignore
                     room.info?.pictures?.[0] || 0
-                  }-desktop.webp`}
+                  }`}
                   className="rounded-lg object-cover"
                   alt={room.name}
                   fill={true}
                 />
               ) : (
                 <LazyImage
-                  src={`/images/${room.roomId}/${
+                  src={`/images/rooms/${
                     // @ts-ignore
                     room.info?.pictures?.[0] || 0
-                  }-desktop.webp`}
+                  }`}
                   className="rounded-lg object-cover"
                   alt={room.name}
                   fill={true}
