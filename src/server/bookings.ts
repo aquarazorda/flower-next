@@ -13,6 +13,8 @@ import { BookingError } from "./types";
 import { getDiscountedPrice } from "~/app/_lib/prices";
 import { saveMsBooking } from "./otelms/bookings";
 import { sendTelegramMessage } from "./telegram";
+import { redirect } from "next/navigation";
+import { isRedirectError } from "next/dist/client/components/redirect";
 
 const formSchema = zfd.formData({
   type: zfd.text(z.enum(["pay", "reservation"])),
@@ -140,8 +142,12 @@ export async function createBooking(
       <br /> ${data.firstName} ${data.lastName} booked ${roomId} from ${format(range.from, "yyyy-MM-dd")} to ${format(range.to, "yyyy-MM-dd")} for ${validationResult.val.price} GEL`);
     }
 
-    return res;
+    redirect("/reservation/success/" + reservationId);
   } catch (e) {
+    if (isRedirectError(e)) {
+      throw e;
+    }
+
     return err(BookingError.GENERIC);
   }
 }
