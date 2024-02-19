@@ -30,7 +30,7 @@ export default function RoomPriceListPage({ room }: Props) {
   const prices = useMemo(() => {
     const temp = room?.prices?.list as Record<string, number>;
 
-    return Object.keys(temp).reduce(
+    return Object.keys(temp || {}).reduce(
       (acc, key) => {
         const parsedDate = endOfMonth(parse(key, "MM-yyyy", new Date()));
 

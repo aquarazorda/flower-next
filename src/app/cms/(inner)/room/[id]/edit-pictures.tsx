@@ -127,7 +127,7 @@ export default function EditRoomPictures({ room, defaultImages }: Props) {
   }
 
   const [displayedImages, setDisplayedImages] = useState(
-    (room?.info?.pictures as string[]).filter(
+    (room?.info?.pictures as string[])?.filter(
       (item) => typeof item === "string",
     ) || [],
   );
