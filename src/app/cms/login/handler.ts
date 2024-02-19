@@ -46,5 +46,5 @@ export default async function login(data: FormData) {
     return Err("An unknown error occurred");
   }
 
-  redirect("/cms/bookings");
+  redirect("/cms");
 }
