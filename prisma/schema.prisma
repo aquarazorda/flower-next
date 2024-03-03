@@ -152,6 +152,7 @@ model Reservation {
   type        ReservationType
   createdAt   DateTime          @default(now())
   paymentId   String?
+  confirmationSent Boolean @default(false)
 
   @@index([roomId])
 }

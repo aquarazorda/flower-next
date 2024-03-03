@@ -5,4 +5,5 @@ export const relatedRooms = [
   { master: "901", related: ["902"] },
   { master: "904", related: ["905"] },
   { master: "804", related: ["805"] },
+  { master: "806", related: ["705"] },
 ];

@@ -15,6 +15,7 @@ import { saveMsBooking } from "./otelms/bookings";
 import { sendTelegramMessage } from "./telegram";
 import { redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect";
+import { sendBookingConfirmationEmail } from "./emails";
 
 const formSchema = zfd.formData({
   type: zfd.text(z.enum(["pay", "reservation"])),
@@ -138,6 +139,24 @@ export async function createBooking(
     });
 
     if (res.ok) {
+      sendBookingConfirmationEmail({
+        customer: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+        },
+        bookingInfo: {
+          msBookingId: res.val,
+          bookingId: reservationId,
+          range: {
+            from: validationResult.val.range.from,
+            to: validationResult.val.range.to,
+          },
+          roomNumber: roomId,
+          numberOfGuests: 2, // TODO
+        },
+      });
+
       sendTelegramMessage(`Reservation confirmed, reservation id - ${reservationId}, otelms booking id - ${res.val}
       <br /> ${data.firstName} ${data.lastName} booked ${roomId} from ${format(range.from, "yyyy-MM-dd")} to ${format(range.to, "yyyy-MM-dd")} for ${validationResult.val.price} GEL`);
     }

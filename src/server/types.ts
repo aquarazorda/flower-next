@@ -7,6 +7,7 @@ export enum BookingError {
   PRICE_MISMATCH = "PRICE_MISMATCH",
   DATES_NOT_AVAILABLE = "DATES_NOT_AVAILABLE",
   OTELMS_ERROR = "OTELMS_ERROR",
+  CONFIRMATION_EMAIL = "CONFIRMATION_EMAIL",
 }
 
 export const getBookingErrorMessage = (error: BookingError | string) =>
@@ -18,6 +19,10 @@ export const getBookingErrorMessage = (error: BookingError | string) =>
     .with(
       BookingError.INVALID_VERIFICATION_CODE,
       () => "Invalid verification code",
+    )
+    .with(
+      BookingError.CONFIRMATION_EMAIL,
+      () => "Failed to send confirmation email.",
     )
     .with(
       BookingError.PRICE_MISMATCH,

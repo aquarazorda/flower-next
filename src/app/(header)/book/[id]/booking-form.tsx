@@ -13,7 +13,7 @@ import {
   FormMessage,
 } from "~/app/_components/ui/form";
 import { Input } from "~/app/_components/ui/input";
-import { sendVerificationMail } from "~/server/auth/verification";
+import { sendVerificationMail } from "~/server/emails";
 
 export default function BookingFormInputs() {
   const [codeSent, setCodeSent] = useState(false);

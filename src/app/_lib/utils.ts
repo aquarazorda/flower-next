@@ -1,6 +1,6 @@
 import { JsonValue } from "@prisma/client/runtime/library";
 import { type ClassValue, clsx } from "clsx";
-import { addMonths, endOfMonth, format, parse } from "date-fns";
+import { addMinutes, addMonths, endOfMonth, format, parse } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { twMerge } from "tailwind-merge";
 import { z } from "zod";
@@ -60,6 +60,12 @@ export const getNextMonth = (dateString: string) => {
   const date = parse(dateString, "MM-yyyy", new Date());
   const nextMonth = addMonths(date, 1);
   return format(nextMonth, "MM-yyyy");
+};
+
+const GMT_PLUS_4 = 240;
+
+export const addTimeOffset = (date: Date) => {
+  return addMinutes(date, GMT_PLUS_4);
 };
 
 export const calculatePrices = (
