@@ -53,7 +53,7 @@ export default function RoomSlider({ name, roomId, pictures }: Props) {
                   sizes={"70vw"}
                   src={`/images/rooms/${item}`}
                   className="object-cover"
-                  priority={currSlideIndex === idx}
+                  priority={currSlideIndex < 1}
                 />
               ) : null}
             </div>

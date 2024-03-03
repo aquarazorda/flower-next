@@ -23,6 +23,7 @@ export default function RoomsList({ rooms }: Props) {
               <Image
                 alt={room.name}
                 fill={true}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 src={`/images/rooms/${
                   // @ts-ignore
                   room.info?.pictures?.[0] || 0

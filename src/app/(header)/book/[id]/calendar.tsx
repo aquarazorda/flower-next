@@ -14,6 +14,7 @@ import { calculatePrices, getLastDayOfMonth } from "~/app/_lib/utils";
 import BookModal from "./book-modal";
 import { DisplayPrice } from "./utils";
 import { isDateRangeBlocked } from "~/app/_lib/date";
+import { inter } from "~/app/_styles/fonts";
 
 type Props = {
   pricesList?: JsonValue;
@@ -86,10 +87,12 @@ export default function BookingCalendar({
   };
 
   return (
-    <div className="flex h-full flex-col justify-center">
+    <div
+      className={`mx-auto mt-4 flex flex-col justify-center lg:mt-0 ${inter.className}`}
+    >
       <Calendar
         mode="range"
-        className="pb-0"
+        className="my-auto p-0"
         onSelect={(range) => onSelect(range)}
         selected={range}
         fromDate={new Date()}
@@ -102,7 +105,7 @@ export default function BookingCalendar({
           <DialogTrigger asChild>
             <Button
               variant="outline"
-              className="w-full text-xs"
+              className="mt-4 w-full text-xs"
               disabled={!range?.to || !range?.from || !price}
             >
               Book Now

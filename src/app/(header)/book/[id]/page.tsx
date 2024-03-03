@@ -11,7 +11,7 @@ type Props = {
   params: { id: string };
 };
 
-export const dynamic = "force-dynamic";
+export const revalidate = 180;
 
 const BookingCalendar = lazy(() => import("./calendar"));
 
@@ -59,9 +59,11 @@ export default async function RoomItemPage({ params }: Props) {
         roomId={room.roomId}
         name={room.name}
       />
-      <div className="flex flex-col lg:mb-40 lg:flex-1 lg:flex-row lg:justify-around lg:gap-6 lg:px-8 lg:pt-20">
-        <div className="px-8 font-shippori lg:my-auto lg:flex lg:flex-col">
-          <h2 className="text-xl text-secondaryHover">{room.name}</h2>
+      <div className="flex flex-col text-sm lg:mb-40 lg:flex-1 lg:flex-row lg:justify-around lg:gap-6 lg:px-8 lg:pt-20 lg:text-base">
+        <div className="px-8 font-shippori lg:flex lg:flex-col">
+          <h2 className="text-lg text-secondaryHover md:text-xl">
+            {room.name}
+          </h2>
           <p className="mt-5 text-pretty">{room.info?.description}</p>
           <p className="mt-2 hidden lg:block">
             The accommodation provides an ironing service, as well as business
@@ -70,28 +72,31 @@ export default async function RoomItemPage({ params }: Props) {
             Russian.
           </p>
           <div className="mt-10 flex flex-col gap-4">
-            <h3 className="text-xl">Amenities</h3>
-            <ul className="grid gap-4 lg:grid-cols-auto-fill">
-              <li className="flex items-center gap-4 whitespace-nowrap">
-                <CancelRounded /> Non smoking room
+            <h3 className="text-lg">Amenities</h3>
+            <ul className="grid gap-4 text-sm lg:grid-cols-auto-fill">
+              <li className="flex items-center gap-2 whitespace-nowrap">
+                <CancelRounded className="min-w-6" /> No smoking
               </li>
-              <li className="flex items-center gap-4 whitespace-nowrap">
-                <CheckRounded /> Private parking
+              <li className="flex items-center gap-2 whitespace-nowrap">
+                <CheckRounded className="min-w-6" /> Free WiFi
               </li>
-              <li className="flex items-center gap-4 whitespace-nowrap">
-                <CheckRounded /> Air conditioning
+              <li className="flex items-center gap-2 whitespace-nowrap">
+                <CheckRounded className="min-w-6" /> Terrace
               </li>
-              <li className="flex items-center gap-4 whitespace-nowrap">
-                <CheckRounded /> Daily housekeeping
+              <li className="flex items-center gap-2 whitespace-nowrap">
+                <CheckRounded className="min-w-6" /> Lift
               </li>
-              <li className="flex items-center gap-4 whitespace-nowrap">
-                <CheckRounded /> Tea/coffee maker
+              <li className="flex items-center gap-2 whitespace-nowrap">
+                <CheckRounded className="min-w-6" /> Private parking
               </li>
-              <li className="flex items-center gap-4 whitespace-nowrap">
-                <CheckRounded /> Terrace
+              <li className="flex items-center gap-2 whitespace-nowrap">
+                <CheckRounded className="min-w-6" /> Air conditioning
               </li>
-              <li className="flex items-center gap-4 whitespace-nowrap">
-                <CheckRounded /> Lift
+              <li className="flex items-center gap-2 whitespace-nowrap">
+                <CheckRounded className="min-w-6" /> Tea/coffee maker
+              </li>
+              <li className="flex items-center gap-2 whitespace-nowrap">
+                <CheckRounded className="min-w-6" /> Daily housekeeping
               </li>
             </ul>
           </div>
@@ -110,7 +115,7 @@ export default async function RoomItemPage({ params }: Props) {
           ) : (
             <div
               className={cn(
-                "flex w-full justify-center lg:pr-6",
+                "flex w-full lg:items-start lg:pr-6",
                 inter.className,
               )}
             >
