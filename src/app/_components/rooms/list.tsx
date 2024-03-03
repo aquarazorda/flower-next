@@ -1,6 +1,7 @@
 import { RouterOutputs } from "~/trpc/shared";
 import Image from "next/image";
 import Link from "next/link";
+import { inter } from "~/app/_styles/fonts";
 
 type Props = {
   rooms: RouterOutputs["room"]["get"];
@@ -9,7 +10,7 @@ type Props = {
 export default function RoomsList({ rooms }: Props) {
   console.log(rooms.map(({ info }) => info?.pictures));
   return (
-    <div className="lg:mb-24 lg:px-[5%]">
+    <div className={`lg:mb-24 lg:px-[5%] ${inter.className}`}>
       {/* <RoomsFilter /> */}
       <main className="my-10 flex flex-wrap justify-center gap-10 px-7 lg:grid lg:grid-cols-5 lg:gap-6">
         {rooms.map((room) => (

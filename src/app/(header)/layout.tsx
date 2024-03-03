@@ -2,7 +2,6 @@ import "~/app/_styles/globals.css";
 
 import { cookies } from "next/headers";
 import { TRPCReactProvider } from "~/trpc/react";
-import { shippori } from "../_styles/fonts";
 import { Header } from "../_components/header";
 import Footer from "../_components/footer";
 import { Metadata } from "next";
@@ -21,9 +20,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={`flex min-h-screen flex-col font-shippori ${shippori.className}`}
-      >
+      <head>
+        <link
+          as="style"
+          rel="stylesheet preload prefetch"
+          href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&amp;display=swap&amp;subset=latin"
+          crossOrigin="anonymous"
+          type="text/css"
+        />
+      </head>
+      <body className={`flex min-h-screen flex-col font-shippori`}>
         <TRPCReactProvider cookies={cookies().toString()}>
           <Header />
           {children}
