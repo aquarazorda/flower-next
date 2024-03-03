@@ -2,15 +2,13 @@ import Link from "next/link";
 import Instagram from "~/app/_assets/icons/Instagram";
 import Phone from "~/app/_assets/icons/Phone";
 import { cn } from "~/app/_lib/utils";
-import { inter } from "~/app/_styles/fonts";
 
 export default function Desktop() {
   return (
     <>
       <footer
         className={cn(
-          "hidden grow justify-between bg-secondary p-8 pb-4 text-xs text-white lg:flex",
-          inter.className,
+          "hidden grow justify-between bg-secondary p-8 pb-4 font-inter text-xs text-white lg:flex",
         )}
       >
         <h6 className="max-h-32 flex-1 text-sm">

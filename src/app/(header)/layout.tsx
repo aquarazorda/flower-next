@@ -6,6 +6,8 @@ import { Header } from "../_components/header";
 import Footer from "../_components/footer";
 import { Metadata } from "next";
 import { Toaster } from "../_components/ui/toaster";
+import { inter, shippori } from "../_styles/fonts";
+import { cn } from "../_lib/utils";
 
 export const metadata: Metadata = {
   title: "Hotel Flower",
@@ -19,16 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-        <link
-          as="style"
-          rel="stylesheet preload prefetch"
-          href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&amp;display=swap&amp;subset=latin"
-          crossOrigin="anonymous"
-          type="text/css"
-        />
-      </head>
+    <html lang="en" className={cn(inter.variable, shippori.variable)}>
       <body className={`flex min-h-screen flex-col font-shippori`}>
         <TRPCReactProvider cookies={cookies().toString()}>
           <Header />

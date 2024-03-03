@@ -9,7 +9,8 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      shippori: ["Shippori Mincho", "serif"],
+      inter: ["var(--font-inter)", "sans-serif"],
+      shippori: ["var(--font-shippori)", "serif"],
     },
     container: {
       center: true,

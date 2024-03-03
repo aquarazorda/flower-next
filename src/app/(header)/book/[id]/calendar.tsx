@@ -88,7 +88,7 @@ export default function BookingCalendar({
 
   return (
     <div
-      className={`mx-auto mt-4 flex flex-col justify-center lg:mt-0 ${inter.className}`}
+      className={`mx-auto my-8 flex flex-col justify-center font-inter lg:my-0`}
     >
       <Calendar
         mode="range"

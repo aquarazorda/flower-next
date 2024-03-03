@@ -11,8 +11,6 @@ import {
   TableRow,
 } from "~/app/_components/ui/table";
 import { useCopyText } from "~/app/_lib/clipboard";
-import { cn } from "~/app/_lib/utils";
-import { inter } from "~/app/_styles/fonts";
 
 const info = {
   phoneNumber: "+995598688686",
@@ -35,12 +33,7 @@ export default function ContactPage() {
           referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
       </div>
-      <div
-        className={cn(
-          inter.className,
-          "flex flex-1 flex-col gap-2 px-2 lg:pr-6",
-        )}
-      >
+      <div className={"flex flex-1 flex-col gap-2 px-2 font-inter lg:pr-6"}>
         <Table>
           <TableBody>
             <TableRow>

@@ -53,15 +53,15 @@ export default async function RoomItemPage({ params }: Props) {
   }
 
   return (
-    <main className="mb-10 flex flex-col gap-6 text-neutral-500 lg:mb-0 lg:flex-row">
+    <main className="relative mb-10 flex flex-col gap-6 text-neutral-500 lg:mb-0 lg:flex-row">
       <RoomSlider
         pictures={room.info?.pictures as string[]}
         roomId={room.roomId}
         name={room.name}
       />
-      <div className="flex flex-col text-sm lg:mb-40 lg:flex-1 lg:flex-row lg:justify-around lg:gap-6 lg:px-8 lg:pt-20 lg:text-base">
+      <div className="flex flex-col text-sm lg:my-auto lg:h-full lg:flex-1 lg:flex-row lg:justify-around lg:gap-6 lg:px-8 lg:text-base">
         <div className="px-8 font-shippori lg:flex lg:flex-col">
-          <h2 className="text-lg text-secondaryHover md:text-xl">
+          <h2 className="text-base text-secondaryHover md:text-xl">
             {room.name}
           </h2>
           <p className="mt-5 text-pretty">{room.info?.description}</p>
@@ -113,12 +113,7 @@ export default async function RoomItemPage({ params }: Props) {
               Booking for this room is not available.
             </div>
           ) : (
-            <div
-              className={cn(
-                "flex w-full lg:items-start lg:pr-6",
-                inter.className,
-              )}
-            >
+            <div className={"flex w-full font-inter lg:items-start lg:pr-6"}>
               <BookingCalendar
                 pricesList={room?.prices.list}
                 blockedDatesString={room?.blockedDate?.dates}

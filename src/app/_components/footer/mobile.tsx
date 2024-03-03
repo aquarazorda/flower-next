@@ -1,16 +1,13 @@
 import Link from "next/link";
 import Instagram from "~/app/_assets/icons/Instagram";
 import Phone from "~/app/_assets/icons/Phone";
-import { cn } from "~/app/_lib/utils";
-import { inter } from "~/app/_styles/fonts";
 
 export default function MobileFooter() {
   return (
     <footer
-      className={cn(
-        "flex flex-col bg-secondary p-7 text-xs text-white lg:hidden lg:p-16",
-        inter.className,
-      )}
+      className={
+        "flex flex-col bg-secondary p-7 font-inter text-xs text-white lg:hidden lg:p-16"
+      }
     >
       <nav className="flex w-full justify-between">
         <ul className="flex flex-col gap-1 font-semibold lg:text-base lg:font-medium">

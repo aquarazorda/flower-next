@@ -33,7 +33,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`font-sans flex min-h-screen flex-col overflow-hidden ${inter.className}`}
+        className={`font-sans flex min-h-screen flex-col overflow-hidden font-inter`}
       >
         <TRPCReactProvider cookies={cookies().toString()}>
           <div className="relative m-11 flex h-[90dvh] rounded-md border">

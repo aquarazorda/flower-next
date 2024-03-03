@@ -6,8 +6,6 @@ import {
   TabsList,
   TabsTrigger,
 } from "~/app/_components/ui/tabs";
-import { cn } from "~/app/_lib/utils";
-import { inter } from "~/app/_styles/fonts";
 import BookingFormInputs from "./booking-form";
 import { DateRange } from "react-day-picker";
 import { DisplayPrice } from "./utils";
@@ -59,7 +57,7 @@ export default function BookModal({ price, range, roomId }: Props) {
   });
 
   return (
-    <Tabs defaultValue="pay" className={cn(inter.className)}>
+    <Tabs defaultValue="pay" className={"font-inter"}>
       <TabsList className="bg-transparent">
         <TabsTrigger
           className="rounded text-neutral-400 data-[state=active]:bg-secondaryHover data-[state=active]:text-white hover:data-[state=active]:bg-secondaryHover/80"

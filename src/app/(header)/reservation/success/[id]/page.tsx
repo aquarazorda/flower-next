@@ -7,7 +7,6 @@ import {
   CardFooter,
   CardHeader,
 } from "~/app/_components/ui/card";
-import { inter } from "~/app/_styles/fonts";
 import { db } from "~/server/db";
 import CopyInput from "./copy-input";
 
@@ -31,7 +30,7 @@ export default async function ReservationSuccessPage({
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center space-y-4">
-      <Card className={inter.className}>
+      <Card className={"font-inter"}>
         <CardHeader>
           <svg
             viewBox="0 0 24 24"

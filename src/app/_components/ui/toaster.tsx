@@ -9,7 +9,6 @@ import {
   ToastViewport,
 } from "src/app/_components/ui/toast";
 import { useToast } from "src/app/_components/ui/use-toast";
-import { inter } from "~/app/_styles/fonts";
 
 export function Toaster() {
   const { toasts } = useToast();
@@ -19,7 +18,7 @@ export function Toaster() {
       {toasts.map(function ({ id, title, description, action, ...props }) {
         return (
           <Toast key={id} {...props}>
-            <div className={`grid gap-1 ${inter.className}`}>
+            <div className={`grid gap-1 font-inter`}>
               {title && <ToastTitle>{title}</ToastTitle>}
               {description && (
                 <ToastDescription>{description}</ToastDescription>
