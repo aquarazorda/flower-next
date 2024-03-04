@@ -33,7 +33,7 @@ export default function RoomsList({ rooms }: Props) {
             </Link>
             {/* <div className="h-full w-full rounded-xl bg-black/10" /> */}
             <div className="mt-5 flex flex-col gap-2 lg:mb-5">
-              <h2 className="mt-auto flex justify-between font-medium text-zinc-500">
+              <h2 className="mt-auto flex justify-between font-medium text-zinc-500 lg:font-shippori">
                 <Link prefetch={false} href={`/book/${room.roomId}`}>
                   {room.name}
                 </Link>

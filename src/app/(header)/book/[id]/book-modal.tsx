@@ -57,21 +57,21 @@ export default function BookModal({ price, range, roomId }: Props) {
   });
 
   return (
-    <Tabs defaultValue="pay" className={"font-inter"}>
-      <TabsList className="bg-transparent">
-        <TabsTrigger
-          className="rounded text-neutral-400 data-[state=active]:bg-secondaryHover data-[state=active]:text-white hover:data-[state=active]:bg-secondaryHover/80"
-          value="pay"
-        >
-          Pay
-        </TabsTrigger>
-        <TabsTrigger
-          className="rounded text-neutral-400 data-[state=active]:bg-secondaryHover data-[state=active]:text-white hover:data-[state=active]:bg-secondaryHover/80"
-          value="reservation"
-        >
-          Reservation
-        </TabsTrigger>
-      </TabsList>
+    <Tabs defaultValue="reservation" className={"font-inter"}>
+      {/* <TabsList className="bg-transparent"> */}
+      {/*   <TabsTrigger */}
+      {/*     className="rounded text-neutral-400 data-[state=active]:bg-secondaryHover data-[state=active]:text-white hover:data-[state=active]:bg-secondaryHover/80" */}
+      {/*     value="pay" */}
+      {/*   > */}
+      {/*     Pay */}
+      {/*   </TabsTrigger> */}
+      {/*   <TabsTrigger */}
+      {/*     className="rounded text-neutral-400 data-[state=active]:bg-secondaryHover data-[state=active]:text-white hover:data-[state=active]:bg-secondaryHover/80" */}
+      {/*     value="reservation" */}
+      {/*   > */}
+      {/*     Reservation */}
+      {/*   </TabsTrigger> */}
+      {/* </TabsList> */}
       <Form {...form}>
         <form action={formAction}>
           <BookingFormInputs />

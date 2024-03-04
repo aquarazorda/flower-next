@@ -14,7 +14,6 @@ import { calculatePrices, getLastDayOfMonth } from "~/app/_lib/utils";
 import BookModal from "./book-modal";
 import { DisplayPrice } from "./utils";
 import { isDateRangeBlocked } from "~/app/_lib/date";
-import { inter } from "~/app/_styles/fonts";
 
 type Props = {
   pricesList?: JsonValue;
@@ -105,7 +104,7 @@ export default function BookingCalendar({
           <DialogTrigger asChild>
             <Button
               variant="outline"
-              className="mt-4 w-full text-xs"
+              className="mt-4 w-full text-xs lg:mt-8"
               disabled={!range?.to || !range?.from || !price}
             >
               Book Now
@@ -115,9 +114,9 @@ export default function BookingCalendar({
             {range && <BookModal range={range} price={price} roomId={roomId} />}
           </DialogContent>
         </Dialog>
-        <p className="mt-6 w-full text-left text-sm">
-          Pay now and get 5% discount
-        </p>
+        {/* <p className="mt-6 w-full text-left text-sm"> */}
+        {/*   Pay now and get 5% discount */}
+        {/* </p> */}
       </div>
     </div>
   );

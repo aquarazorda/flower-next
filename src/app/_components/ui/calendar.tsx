@@ -40,7 +40,7 @@ function Calendar({
         table: "w-full border-collapse space-y-1 min-h-[262px]",
         head_row: "flex w-full",
         head_cell:
-          "text-slate-500 rounded-md flex-1 font-normal text-[0.8rem] dark:text-slate-400",
+          "rounded-md flex-1 font-normal text-[0.8rem] dark:text-slate-400",
         row: "flex w-full",
         cell: "size-10 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-slate-100/50 [&:has([aria-selected])]:bg-slate-100 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20 dark:[&:has([aria-selected].day-outside)]:bg-slate-800/50 dark:[&:has([aria-selected])]:bg-slate-800",
         day: cn(

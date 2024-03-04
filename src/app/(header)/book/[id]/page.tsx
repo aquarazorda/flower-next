@@ -4,8 +4,6 @@ import { redirect } from "next/navigation";
 import { Suspense, lazy } from "react";
 import { CancelRounded } from "~/app/_assets/icons/CancelRounded";
 import { CheckRounded } from "~/app/_assets/icons/CheckRounded";
-import { cn } from "~/app/_lib/utils";
-import { inter } from "~/app/_styles/fonts";
 
 type Props = {
   params: { id: string };
@@ -108,11 +106,7 @@ export default async function RoomItemPage({ params }: Props) {
           </p>
         </div>
         <Suspense>
-          {!room.prices ? (
-            <div className="m-auto text-center font-shippori text-base">
-              Booking for this room is not available.
-            </div>
-          ) : (
+          {!!room.prices && (
             <div className={"flex w-full font-inter lg:items-start lg:pr-6"}>
               <BookingCalendar
                 pricesList={room?.prices.list}
@@ -126,3 +120,7 @@ export default async function RoomItemPage({ params }: Props) {
     </main>
   );
 }
+// {/* <div className="m-auto text-center font-shippori text-base"> */}
+//             {/*   Booking for this room is not available. */}
+//             {/* </div> */}
+//
