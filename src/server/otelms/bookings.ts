@@ -115,8 +115,8 @@ export const saveMsBooking = async (data: SaveMsBookingProps) => {
   const body = new URLSearchParams();
 
   body.append("room_id", String(data.msId));
-  body.append("datein", format(data.dateRange.from, "yyyy-MM-dd"));
-  body.append("dateout", format(data.dateRange.to, "yyyy-MM-dd"));
+  body.append("datein", format(data.dateRange.from + 1, "yyyy-MM-dd"));
+  body.append("dateout", format(data.dateRange.to + 1, "yyyy-MM-dd"));
   body.append("hms_id", "0");
   body.append("insert_or_update_guest_id", "0");
   body.append("firstname", data.user.firstName);

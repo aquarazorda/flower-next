@@ -90,7 +90,7 @@ export async function sendBookingConfirmationEmail({
 }: BookingConfirmationProps) {
   const msg = {
     to: customer.email,
-    from: "givi.gelashvili@protonmail.ch", // TODO
+    from: "info@flowertbilisi.com", // TODO
     subject: "Booking Confirmation",
     text: "Booking Confirmation",
     html: `<!DOCTYPE html>
