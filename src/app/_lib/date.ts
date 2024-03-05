@@ -18,3 +18,6 @@ export function isDateRangeBlocked(
     }),
   );
 }
+
+export const reparseDate = (date: Date) =>
+  new Date(date.toLocaleString("en-US", { timeZone: "Asia/Tbilisi" }));

@@ -7,7 +7,7 @@ import { capitalizeFirst, phoneRegex } from "~/app/_lib/clipboard";
 import { db } from "./db";
 import { calculatePrices } from "~/app/_lib/utils";
 import { Either, err, ok } from "~/app/_lib/ts-results";
-import { isDateRangeBlocked } from "~/app/_lib/date";
+import { isDateRangeBlocked, reparseDate } from "~/app/_lib/date";
 import { format, parseISO } from "date-fns";
 import { BookingError } from "./types";
 import { getDiscountedPrice } from "~/app/_lib/prices";
@@ -16,7 +16,6 @@ import { sendTelegramMessage } from "./telegram";
 import { redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { sendBookingConfirmationEmail } from "./emails";
-import { utcToZonedTime } from "date-fns-tz";
 
 const formSchema = zfd.formData({
   type: zfd.text(z.enum(["pay", "reservation"])),
@@ -51,8 +50,8 @@ export async function createBooking(
   }
 
   const range = {
-    from: utcToZonedTime(rangeProp.from, "GMT+4"),
-    to: utcToZonedTime(rangeProp.to, "GMT+4"),
+    from: reparseDate(rangeProp.from),
+    to: reparseDate(rangeProp.to),
   };
 
   if (!parsed.success) {
