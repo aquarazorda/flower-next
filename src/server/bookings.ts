@@ -16,6 +16,7 @@ import { sendTelegramMessage } from "./telegram";
 import { redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { sendBookingConfirmationEmail } from "./emails";
+import { utcToZonedTime } from "date-fns-tz";
 
 const formSchema = zfd.formData({
   type: zfd.text(z.enum(["pay", "reservation"])),
@@ -39,15 +40,20 @@ type DataProp = {
 };
 
 export async function createBooking(
-  { roomId, range }: DataProp,
+  { roomId, range: rangeProp }: DataProp,
   previousState: { error?: string },
   formData: FormData,
 ): Promise<Either<BookingError | string, {}>> {
   const parsed = formSchema.safeParse(formData);
 
-  if (!range.from || !range.to) {
+  if (!rangeProp.from || !rangeProp.to) {
     return err(BookingError.GENERIC);
   }
+
+  const range = {
+    from: utcToZonedTime(rangeProp.from, "GMT+4"),
+    to: utcToZonedTime(rangeProp.to, "GMT+4"),
+  };
 
   if (!parsed.success) {
     return err(
