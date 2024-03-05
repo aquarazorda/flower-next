@@ -16,7 +16,7 @@ export async function sendVerificationMail(email: string) {
 
   const msg = {
     to: email,
-    from: "givi.gelashvili@protonmail.ch", // TODO
+    from: "info@flowertbilisi.com",
     subject: "Verify your email address",
     text: "Verify your email address",
     html: `<!DOCTYPE html>
@@ -62,6 +62,7 @@ ${verificationCode}
 
     return ok(undefined);
   } catch (e) {
+    console.log(e);
     return err("Failed to send verification email, please re-try.");
   }
 }
