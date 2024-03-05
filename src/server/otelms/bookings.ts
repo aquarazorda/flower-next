@@ -1,7 +1,7 @@
 import { env } from "~/env";
 import { getCurrentDate, getFutureDate } from "~/app/_lib/utils";
 import { load } from "cheerio";
-import { format, intervalToDuration } from "date-fns";
+import { addDays, format, intervalToDuration } from "date-fns";
 import { getOriginalPrice } from "~/app/_lib/prices";
 import { err, ok } from "~/app/_lib/ts-results";
 import { BookingError } from "../types";
@@ -115,8 +115,8 @@ export const saveMsBooking = async (data: SaveMsBookingProps) => {
   const body = new URLSearchParams();
 
   body.append("room_id", String(data.msId));
-  body.append("datein", format(data.dateRange.from + 1, "yyyy-MM-dd"));
-  body.append("dateout", format(data.dateRange.to + 1, "yyyy-MM-dd"));
+  body.append("datein", format(addDays(data.dateRange.from, 1), "yyyy-MM-dd"));
+  body.append("dateout", format(addDays(data.dateRange.to, 1), "yyyy-MM-dd"));
   body.append("hms_id", "0");
   body.append("insert_or_update_guest_id", "0");
   body.append("firstname", data.user.firstName);
