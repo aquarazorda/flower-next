@@ -1,11 +1,14 @@
 "use server";
 
 import { Err } from "ts-results";
-import { auth } from "~/server/auth/lucia";
 import { redirect } from "next/navigation";
-import { LuciaError } from "lucia";
+import { Argon2id } from "oslo/password";
 import { cookies } from "next/headers";
 import { zfd } from "zod-form-data";
+import { db } from "~/server/db";
+import { eq } from "drizzle-orm";
+import { user } from "~/server/schema";
+import { auth } from "~/server/auth/lucia";
 
 const authSchema = zfd.formData({
   username: zfd.text(),
@@ -20,31 +23,30 @@ export default async function login(data: FormData) {
 
   const { username, password } = res.data;
 
-  try {
-    const key = await auth.useKey("username", username.toLowerCase(), password);
+  const existingUser = await db.query.user.findFirst({
+    where: eq(user.username, username.toLowerCase()),
+  });
 
-    const session = await auth.createSession({
-      userId: key.userId,
-      attributes: {},
-    });
-
-    const sessionCookie = auth.createSessionCookie(session);
-
-    cookies().set({
-      name: sessionCookie.name,
-      value: sessionCookie.value,
-      ...sessionCookie.attributes,
-    });
-  } catch (e) {
-    if (
-      e instanceof LuciaError &&
-      (e.message === "AUTH_INVALID_KEY_ID" ||
-        e.message === "AUTH_INVALID_PASSWORD")
-    ) {
-      return Err("Incorrect username or password");
-    }
-    return Err("An unknown error occurred");
+  if (!existingUser) {
+    return Err("Incorrect username or password");
   }
 
-  redirect("/cms");
+  const validPassword = await new Argon2id().verify(
+    existingUser.hashed_password,
+    password,
+  );
+
+  if (!validPassword) {
+    return Err("Incorrect username or password");
+  }
+
+  const session = await auth.createSession(existingUser.id, {});
+  const sessionCookie = auth.createSessionCookie(session.id);
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes,
+  );
+
+  return redirect("/cms");
 }

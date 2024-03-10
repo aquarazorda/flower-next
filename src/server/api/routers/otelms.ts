@@ -1,3 +1,4 @@
+import { blockedDate } from "~/server/schema";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { getBookedDates } from "~/server/otelms/bookings";
 
@@ -10,12 +11,10 @@ export const otelmsRouter = createTRPCRouter({
       return [];
     }
 
-    await ctx.db.$transaction([
-      ctx.db.blockedDate.deleteMany({}),
-      ctx.db.blockedDate.createMany({
-        data,
-      }),
-    ]);
+    await ctx.db.transaction(async (tx) => {
+      await tx.delete(blockedDate);
+      await tx.insert(blockedDate).values(data);
+    });
 
     return data;
   }),

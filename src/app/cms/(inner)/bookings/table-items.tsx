@@ -28,7 +28,7 @@ export const ReservationsTable = async ({ pending }: { pending?: boolean }) => {
   const data = await api.reservations.getReservations.query().then((d) =>
     d
       .filter((item) => {
-        const cond = item.status === "PAID" || item.status === "RESERVED";
+        const cond = item.status === "CONFIRMED";
         return pending ? !cond : cond;
       })
       .sort((a, b) => compareDesc(a.createdAt, b.createdAt)),

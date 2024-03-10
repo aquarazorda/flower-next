@@ -1,4 +1,3 @@
-import { JsonValue } from "@prisma/client/runtime/library";
 import { type ClassValue, clsx } from "clsx";
 import { addMinutes, addMonths, endOfMonth, format, parse } from "date-fns";
 import { DateRange } from "react-day-picker";
@@ -40,7 +39,7 @@ export const getFutureDate = (months: number): string => {
   return date.toISOString().slice(0, 10);
 };
 
-export const parsePrices = (prices: JsonValue) => {
+export const parsePrices = (prices: Record<string, number>) => {
   const pricesSchema = z.record(z.string(), z.number());
   const pricesParsed = pricesSchema.safeParse(prices);
 
@@ -70,7 +69,7 @@ export const addTimeOffset = (date: Date) => {
 
 export const calculatePrices = (
   { from, to }: DateRange,
-  pricesList: JsonValue,
+  pricesList: Record<string, number>,
 ) => {
   const prices = parsePrices(pricesList);
   if (!prices || !from || !to) return 0;

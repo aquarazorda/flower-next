@@ -1,6 +1,5 @@
 "use client";
 
-import { JsonValue } from "@prisma/client/runtime/library";
 import { useMemo, useState } from "react";
 import { DateRange } from "react-day-picker";
 import { Button } from "~/app/_components/ui/button";
@@ -16,8 +15,8 @@ import { DisplayPrice } from "./utils";
 import { isDateRangeBlocked } from "~/app/_lib/date";
 
 type Props = {
-  pricesList?: JsonValue;
-  blockedDatesString?: JsonValue;
+  pricesList?: Record<string, number>;
+  blockedDatesString?: { from: string; to: string }[];
   roomId: string;
 };
 

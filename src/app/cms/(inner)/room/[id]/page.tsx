@@ -30,7 +30,7 @@ export default async function CMSRoomPage({
 }: {
   params: { id: string };
 }) {
-  const room = await api.room.getRoom.query(params.id);
+  const room = await api.room.getRoom.query(Number(params.id));
   const defaultImages = getDefaultImages(params.id);
 
   return (

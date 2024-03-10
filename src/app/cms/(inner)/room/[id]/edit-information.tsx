@@ -9,6 +9,8 @@ import { RouterOutputs } from "~/trpc/shared";
 import { revalidatePath } from "next/cache";
 import { db } from "~/server/db";
 import { redirect } from "next/navigation";
+import { roomInfo } from "~/server/schema";
+import { eq } from "drizzle-orm";
 
 type Props = {
   room: RouterOutputs["room"]["getRoom"];
@@ -31,15 +33,13 @@ export default function EditRoomInformation({ room }: Props) {
     const data = schema.safeParse(formData);
 
     if (data.success) {
-      await db.roomInfo.update({
-        where: {
-          roomId: room.roomId,
-        },
-        data: {
+      await db
+        .update(roomInfo)
+        .set({
           ...data.data,
           updatedAt: new Date(),
-        },
-      });
+        })
+        .where(eq(roomInfo.id, room.id));
     }
 
     revalidatePath(`/cms/room/${room.id}`);

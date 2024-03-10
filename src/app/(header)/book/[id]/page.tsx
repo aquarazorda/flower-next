@@ -14,7 +14,7 @@ export const revalidate = 180;
 const BookingCalendar = lazy(() => import("./calendar"));
 
 export async function generateMetadata({ params }: Props) {
-  const data = await api.room.getRoom.query(params.id);
+  const data = await api.room.getRoom.query(Number(params.id));
 
   return {
     title: `Hotel Flower - ${data?.name} - ${data?.roomId}`,
@@ -24,7 +24,6 @@ export async function generateMetadata({ params }: Props) {
       description: data?.info?.description || "",
       images: [
         {
-          // @ts-ignore
           url: `/_next/image?url=/images/${data?.info?.pictures?.[0]}&w=1200&q=75`,
           width: 1200,
           height: 800,
@@ -36,7 +35,6 @@ export async function generateMetadata({ params }: Props) {
       description: data?.info?.description || "",
       card: "summary_large_image",
       images: [
-        // @ts-ignore
         `/_next/image?url=/images/rooms/${data?.info?.pictures?.[0]}&w=1200&q=75`,
       ],
     },
@@ -44,7 +42,7 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function RoomItemPage({ params }: Props) {
-  const room = await api.room.getRoom.query(params.id);
+  const room = await api.room.getRoom.query(Number(params.id));
 
   if (!room) {
     return redirect("/book");
@@ -109,8 +107,8 @@ export default async function RoomItemPage({ params }: Props) {
           {!!room.prices && (
             <div className={"flex w-full font-inter lg:items-start lg:pr-6"}>
               <BookingCalendar
-                pricesList={room?.prices.list}
-                blockedDatesString={room?.blockedDate?.dates}
+                pricesList={room?.prices.list ?? undefined}
+                blockedDatesString={room?.blockedDate?.dates ?? undefined}
                 roomId={params.id}
               />
             </div>

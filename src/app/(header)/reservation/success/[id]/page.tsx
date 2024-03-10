@@ -9,17 +9,17 @@ import {
 } from "~/app/_components/ui/card";
 import { db } from "~/server/db";
 import CopyInput from "./copy-input";
+import { reservation as reservationSchema } from "~/server/schema";
+import { eq } from "drizzle-orm";
 
 export default async function ReservationSuccessPage({
   params,
 }: {
   params: { id: string };
 }) {
-  const reservation = await db.reservation.findFirst({
-    where: {
-      id: params.id,
-    },
-    select: {
+  const reservation = await db.query.reservation.findFirst({
+    where: eq(reservationSchema.id, params.id),
+    with: {
       room: true,
     },
   });

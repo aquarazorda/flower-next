@@ -11,14 +11,14 @@ export const room = sqliteTable(
   "room",
   {
     id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-    roomId: integer("roomId", { mode: "number" }).unique(),
+    roomId: integer("roomId", { mode: "number" }).unique().notNull(),
     createdAt: integer("createdAt", { mode: "timestamp" }).default(
       sql`CURRENT_TIMESTAMP`,
     ),
     updatedAt: integer("updatedAt", { mode: "timestamp" }).default(
       sql`CURRENT_TIMESTAMP`,
     ),
-    name: text("name"),
+    name: text("name").notNull(),
     order: integer("order").default(0),
     type: text("type"),
   },
@@ -44,11 +44,14 @@ export const roomInfo = sqliteTable("roomInfo", {
   ),
   roomId: integer("roomId", { mode: "number" })
     .unique()
-    .references(() => room.roomId),
+    .references(() => room.roomId)
+    .notNull(),
   description: text("description", { mode: "text", length: 2000 }),
   pictures: text("pictures", { mode: "json" }).$type<string[]>(),
   persons: integer("persons").default(3),
-  extraPerson: integer("extraPerson", { mode: "boolean" }).default(true),
+  extraPerson: integer("extraPerson", { mode: "boolean" })
+    .default(true)
+    .notNull(),
 });
 
 export const roomInfoRelations = relations(roomInfo, ({ one }) => ({
@@ -66,10 +69,13 @@ export const blockedDate = sqliteTable("blockedDate", {
   updatedAt: integer("updatedAt", { mode: "timestamp" }).default(
     sql`CURRENT_TIMESTAMP`,
   ),
-  dates: text("dates", { mode: "json" }).$type<{ from: string; to: string }>(),
+  dates: text("dates", { mode: "json" }).$type<
+    { from: string; to: string }[]
+  >(),
   roomId: integer("roomId", { mode: "number" })
     .unique()
-    .references(() => room.roomId),
+    .references(() => room.roomId)
+    .notNull(),
 });
 
 export const blockedDateRelations = relations(blockedDate, ({ one }) => ({
@@ -130,6 +136,7 @@ export const verifiedEmail = sqliteTable(
     updatedAt: integer("updatedAt", { mode: "timestamp" }).default(
       sql`CURRENT_TIMESTAMP`,
     ),
+    verificationCode: text("verificationCode", { mode: "text", length: 200 }),
   },
   (table) => ({
     verifiedEmailIdx: uniqueIndex("verifiedEmailIdx").on(table.email),
@@ -139,7 +146,9 @@ export const verifiedEmail = sqliteTable(
 export const reservation = sqliteTable(
   "reservation",
   {
-    id: text("id").$defaultFn(() => createId()),
+    id: text("id")
+      .$defaultFn(() => createId())
+      .notNull(),
     email: text("email", { mode: "text", length: 200 }),
     phoneNumber: text("phoneNumber", { mode: "text", length: 20 }),
     firstName: text("firstName", { mode: "text", length: 200 }),
@@ -147,25 +156,32 @@ export const reservation = sqliteTable(
     status: text("status", { enum: ["PENDING", "CONFIRMED", "CANCELLED"] }),
     price: integer("price", { mode: "number" }).default(0),
     roomId: integer("roomId", { mode: "number" }).references(() => room.roomId),
-    dateFrom: integer("dateFrom", { mode: "timestamp" }),
-    dateTo: integer("dateTo", { mode: "timestamp" }),
+    dateFrom: integer("dateFrom", { mode: "timestamp" }).notNull(),
+    dateTo: integer("dateTo", { mode: "timestamp" }).notNull(),
     error: text("error", { mode: "text", length: 2000 }),
     type: text("type", { enum: ["RESERVATION", "PAYMENT"] }),
     paymentId: text("paymentId", { mode: "text", length: 200 }),
     confirmationSent: integer("confirmationSent", { mode: "boolean" }).default(
       false,
     ),
-    createdAt: integer("createdAt", { mode: "timestamp" }).default(
-      sql`CURRENT_TIMESTAMP`,
-    ),
-    updatedAt: integer("updatedAt", { mode: "timestamp" }).default(
-      sql`CURRENT_TIMESTAMP`,
-    ),
+    createdAt: integer("createdAt", { mode: "timestamp" })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: integer("updatedAt", { mode: "timestamp" })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
   },
   (table) => ({
     reservationRoomIdIdx: uniqueIndex("reservationRoomIdIdx").on(table.roomId),
   }),
 );
+
+export const reservationRelations = relations(reservation, ({ one }) => ({
+  room: one(room, {
+    fields: [reservation.roomId],
+    references: [room.roomId],
+  }),
+}));
 
 export const user = sqliteTable("user", {
   id: text("id").notNull().primaryKey(),
