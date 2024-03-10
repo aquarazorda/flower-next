@@ -6,6 +6,8 @@ import { env } from "~/env";
 import { db } from "./db";
 import { err, ok } from "~/app/_lib/ts-results";
 import { BookingError } from "./types";
+import { reservation, verifiedEmail } from "./schema";
+import { eq } from "drizzle-orm";
 
 sgMail.setApiKey(env.SENDGRID_KEY);
 
@@ -53,12 +55,18 @@ ${verificationCode}
   };
 
   try {
-    await sgMail.send(msg);
-    await db.verifiedEmail.upsert({
-      where: { email },
-      create: { email, verificationCode: String(verificationCode) },
-      update: { verificationCode: String(verificationCode), status: "PENDING" },
-    });
+    const res = await sgMail.send(msg);
+
+    await db
+      .insert(verifiedEmail)
+      .values({
+        email,
+        verificationCode: String(verificationCode),
+      })
+      .onConflictDoUpdate({
+        target: [verifiedEmail.email],
+        set: { verificationCode: String(verificationCode), status: "PENDING" },
+      });
 
     return ok(undefined);
   } catch (e) {
@@ -140,25 +148,21 @@ Thank you for staying with us.
 
   try {
     await sgMail.send(msg);
-    await db.reservation.update({
-      where: {
-        id: bookingInfo.bookingId,
-      },
-      data: {
+    await db
+      .update(reservation)
+      .set({
         confirmationSent: true,
-      },
-    });
+      })
+      .where(eq(reservation.id, bookingInfo.bookingId));
 
     return ok(undefined);
   } catch (e) {
-    await db.reservation.update({
-      where: {
-        id: bookingInfo.bookingId,
-      },
-      data: {
+    await db
+      .update(reservation)
+      .set({
         error: BookingError.CONFIRMATION_EMAIL,
-      },
-    });
+      })
+      .where(eq(reservation.id, bookingInfo.bookingId));
 
     return err(BookingError.CONFIRMATION_EMAIL);
   }

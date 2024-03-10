@@ -16,6 +16,8 @@ import { sendTelegramMessage } from "./telegram";
 import { redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { sendBookingConfirmationEmail } from "./emails";
+import { reservation, room, transaction, verifiedEmail } from "./schema";
+import { eq } from "drizzle-orm";
 
 const formSchema = zfd.formData({
   type: zfd.text(z.enum(["pay", "reservation"])),
@@ -65,9 +67,21 @@ export async function createBooking(
   const data = parsed.data;
 
   try {
-    const [{ id: reservationId }, emailRes] = await db.$transaction([
-      db.reservation.create({
-        data: {
+    const verificationResult = await db.transaction(async (tx) => {
+      const emailRes = await tx.query.verifiedEmail.findFirst({
+        where: eq(verifiedEmail.email, data.email),
+        columns: {
+          verificationCode: true,
+        },
+      });
+
+      if (!emailRes || !emailRes.verificationCode) {
+        return null;
+      }
+
+      const reservationResult = await tx
+        .insert(reservation)
+        .values({
           type: data.type === "pay" ? "PAYMENT" : "RESERVATION",
           email: data.email,
           firstName: data.firstName,
@@ -76,36 +90,41 @@ export async function createBooking(
           dateFrom: range.from,
           dateTo: range.to,
           roomId: Number(roomId),
-        },
-        select: {
-          id: true,
-        },
-      }),
-      db.verifiedEmail.findFirst({
-        where: {
-          email: data.email,
-        },
-        select: {
-          verificationCode: true,
-        },
-      }),
-    ]);
+        })
+        .returning({ id: reservation.id });
 
-    if (!emailRes || emailRes.verificationCode !== data.verificationCode) {
+      if (!reservationResult[0]) {
+        return null;
+      }
+
+      return {
+        verificationCode: emailRes.verificationCode,
+        reservationId: reservationResult[0].id,
+      };
+    });
+
+    if (!verificationResult?.reservationId) {
+      return err(BookingError.GENERIC);
+    }
+
+    if (
+      !verificationResult ||
+      verificationResult.verificationCode !== data.verificationCode
+    ) {
       return await saveError(
-        reservationId,
+        verificationResult.reservationId,
         BookingError.INVALID_VERIFICATION_CODE,
       );
     }
 
-    await db.verifiedEmail.update({
-      where: {
-        email: data.email,
-      },
-      data: {
+    const { reservationId } = verificationResult;
+
+    await db
+      .update(verifiedEmail)
+      .set({
         status: "SUCCESS",
-      },
-    });
+      })
+      .where(eq(verifiedEmail.email, data.email));
 
     const validationResult = await validateReservation(
       reservationId,
@@ -118,16 +137,14 @@ export async function createBooking(
       return validationResult;
     }
 
-    await db.reservation.update({
-      where: {
-        id: reservationId,
-      },
-      data: {
-        status: data.type === "pay" ? "PAID" : "RESERVED",
+    await db
+      .update(reservation)
+      .set({
+        type: data.type === "pay" ? "PAYMENT" : "RESERVATION",
         price: validationResult.val.price,
         error: null,
-      },
-    });
+      })
+      .where(eq(reservation.id, reservationId));
 
     const res = await saveMsBooking({
       dateRange: validationResult.val.range,
@@ -182,23 +199,21 @@ const validateReservation = async (
   range: DateRange,
   roomId: string,
 ) => {
-  const roomData = await db.room.findUnique({
-    where: {
-      roomId: Number(roomId),
-    },
-    select: {
+  const roomData = await db.query.room.findFirst({
+    where: eq(room.roomId, Number(roomId)),
+    with: {
       blockedDate: {
-        select: {
+        columns: {
           dates: true,
         },
       },
       prices: {
-        select: {
+        columns: {
           list: true,
         },
       },
       info: {
-        select: {
+        columns: {
           msId: true,
         },
       },
@@ -216,16 +231,15 @@ const validateReservation = async (
     return await saveError(reservationId, BookingError.INVALID_ROOM);
   }
 
-  const dates = roomData.blockedDate.dates as { from: string; to: string }[];
-  const correctedDates = dates.map(({ from, to }) => ({
+  const dates = roomData.blockedDate.dates;
+  const correctedDates = dates?.map(({ from, to }) => ({
     from: parseISO(from),
     to: parseISO(to),
   }));
 
-  const isNotAvailable = isDateRangeBlocked(
-    range as { from: Date; to: Date },
-    correctedDates,
-  );
+  const isNotAvailable = correctedDates
+    ? isDateRangeBlocked(range as { from: Date; to: Date }, correctedDates)
+    : false;
 
   if (isNotAvailable) {
     return await saveError(reservationId, BookingError.DATES_NOT_AVAILABLE);
@@ -257,14 +271,12 @@ const createReservation = async (
 };
 
 const saveError = async (id: string, error: BookingError) => {
-  await db.reservation.update({
-    where: {
-      id,
-    },
-    data: {
+  await db
+    .update(reservation)
+    .set({
       error: error.toString(),
-    },
-  });
+    })
+    .where(eq(reservation.id, id));
 
   return err(error);
 };
