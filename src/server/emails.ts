@@ -53,7 +53,7 @@ ${verificationCode}
   };
 
   try {
-    await sgMail.send(msg);
+    const res = await sgMail.send(msg);
     await db.verifiedEmail.upsert({
       where: { email },
       create: { email, verificationCode: String(verificationCode) },

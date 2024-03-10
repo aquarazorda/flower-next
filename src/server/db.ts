@@ -1,16 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+import { drizzle } from "drizzle-orm/libsql";
+import { createClient } from "@libsql/client";
+import * as schema from "./schema";
 
 import { env } from "~/env";
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
-
-export const db =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    log:
-      env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
-  });
-
-if (env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+const client = createClient({ url: env.DB_URL, authToken: env.DB_TOKEN });
+export const db = drizzle(client, { schema });
