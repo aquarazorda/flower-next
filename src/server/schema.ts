@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 import {
   integer,
@@ -27,6 +27,12 @@ export const room = sqliteTable(
   }),
 );
 
+export const roomRelations = relations(room, ({ one }) => ({
+  info: one(roomInfo),
+  prices: one(price),
+  blockedDate: one(blockedDate),
+}));
+
 export const roomInfo = sqliteTable("roomInfo", {
   id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
   msId: integer("msId", { mode: "number" }).unique(),
@@ -45,6 +51,13 @@ export const roomInfo = sqliteTable("roomInfo", {
   extraPerson: integer("extraPerson", { mode: "boolean" }).default(true),
 });
 
+export const roomInfoRelations = relations(roomInfo, ({ one }) => ({
+  room: one(room, {
+    fields: [roomInfo.roomId],
+    references: [room.roomId],
+  }),
+}));
+
 export const blockedDate = sqliteTable("blockedDate", {
   id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
   createdAt: integer("createdAt", { mode: "timestamp" }).default(
@@ -59,6 +72,13 @@ export const blockedDate = sqliteTable("blockedDate", {
     .references(() => room.roomId),
 });
 
+export const blockedDateRelations = relations(blockedDate, ({ one }) => ({
+  room: one(room, {
+    fields: [blockedDate.roomId],
+    references: [room.roomId],
+  }),
+}));
+
 export const price = sqliteTable("price", {
   id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
   createdAt: integer("createdAt", { mode: "timestamp" }).default(
@@ -72,6 +92,13 @@ export const price = sqliteTable("price", {
     .unique()
     .references(() => room.roomId),
 });
+
+export const priceRelations = relations(price, ({ one }) => ({
+  room: one(room, {
+    fields: [price.roomId],
+    references: [room.roomId],
+  }),
+}));
 
 export const transaction = sqliteTable("transaction", {
   id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
@@ -139,3 +166,17 @@ export const reservation = sqliteTable(
     reservationRoomIdIdx: uniqueIndex("reservationRoomIdIdx").on(table.roomId),
   }),
 );
+
+export const user = sqliteTable("user", {
+  id: text("id").notNull().primaryKey(),
+  username: text("username").notNull().unique(),
+  hashed_password: text("hashed_password").notNull(),
+});
+
+export const session = sqliteTable("session", {
+  id: text("id").notNull().primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id),
+  expiresAt: integer("expires_at").notNull(),
+});

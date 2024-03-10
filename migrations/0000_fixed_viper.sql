@@ -59,6 +59,13 @@ CREATE TABLE `roomInfo` (
 	FOREIGN KEY (`roomId`) REFERENCES `room`(`roomId`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
+CREATE TABLE `session` (
+	`id` text PRIMARY KEY NOT NULL,
+	`user_id` text NOT NULL,
+	`expires_at` integer NOT NULL,
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
 CREATE TABLE `transaction` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`createdAt` integer DEFAULT CURRENT_TIMESTAMP,
@@ -70,6 +77,12 @@ CREATE TABLE `transaction` (
 	`amount` integer,
 	`transactionId` text,
 	FOREIGN KEY (`roomId`) REFERENCES `room`(`roomId`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `user` (
+	`id` text PRIMARY KEY NOT NULL,
+	`username` text NOT NULL,
+	`hashed_password` text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `verifiedEmail` (
@@ -88,5 +101,6 @@ CREATE UNIQUE INDEX `roomIdIdx` ON `room` (`roomId`);--> statement-breakpoint
 CREATE UNIQUE INDEX `roomInfo_msId_unique` ON `roomInfo` (`msId`);--> statement-breakpoint
 CREATE UNIQUE INDEX `roomInfo_roomId_unique` ON `roomInfo` (`roomId`);--> statement-breakpoint
 CREATE UNIQUE INDEX `transaction_roomId_unique` ON `transaction` (`roomId`);--> statement-breakpoint
+CREATE UNIQUE INDEX `user_username_unique` ON `user` (`username`);--> statement-breakpoint
 CREATE UNIQUE INDEX `verifiedEmail_email_unique` ON `verifiedEmail` (`email`);--> statement-breakpoint
 CREATE UNIQUE INDEX `verifiedEmailIdx` ON `verifiedEmail` (`email`);

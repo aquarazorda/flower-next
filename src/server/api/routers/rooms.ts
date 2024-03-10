@@ -1,5 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
+import { asc, eq } from "drizzle-orm";
+import { blockedDate, room } from "~/server/schema";
 
 export const roomRouter = createTRPCRouter({
   get: publicProcedure
@@ -11,65 +13,61 @@ export const roomRouter = createTRPCRouter({
         .optional(),
     )
     .query(async ({ ctx, input }) => {
-      return ctx.db.room.findMany({
-        select: {
+      return ctx.db.query.room.findMany({
+        columns: {
           type: true,
-          info: true,
           name: true,
           roomId: true,
           order: true,
           id: true,
         },
-        orderBy: {
-          order: "asc",
+        with: {
+          info: true,
         },
-        where: {
-          type: {
-            equals: input?.type,
+        orderBy: asc(room.order),
+        where: !!input?.type ? eq(room.type, input.type) : undefined,
+      });
+    }),
+  getRoom: publicProcedure
+    .input(z.coerce.number())
+    .query(async ({ ctx, input }) => {
+      const data = await ctx.db.query.room.findFirst({
+        where: eq(room.roomId, input),
+        columns: {
+          id: true,
+          name: true,
+          roomId: true,
+        },
+        with: {
+          prices: {
+            columns: {
+              list: true,
+            },
+          },
+          blockedDate: {
+            columns: {
+              dates: true,
+            },
+          },
+          info: {
+            columns: {
+              msId: true,
+              description: true,
+              extraPerson: true,
+              persons: true,
+              pictures: true,
+            },
           },
         },
       });
-    }),
-  getRoom: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    const data = await ctx.db.room.findUnique({
-      where: {
-        roomId: Number(input),
-      },
-      select: {
-        id: true,
-        name: true,
-        roomId: true,
-        prices: {
-          select: {
-            list: true,
-          },
-        },
-        blockedDate: {
-          select: {
-            dates: true,
-          },
-        },
-        info: {
-          select: {
-            msId: true,
-            description: true,
-            extraPerson: true,
-            persons: true,
-            pictures: true,
-          },
-        },
-      },
-    });
 
-    return data;
-  }),
+      return data;
+    }),
   getBookings: publicProcedure
     .input(z.number().optional())
     .query(({ ctx, input }) => {
-      return ctx.db.blockedDate.findMany({
-        where: {
-          roomId: input,
-        },
+      return ctx.db.query.blockedDate.findMany({
+        where: input ? eq(blockedDate.roomId, input) : undefined,
       });
     }),
 });

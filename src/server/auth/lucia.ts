@@ -1,16 +1,32 @@
-import { lucia } from "lucia";
-import { nextjs_future } from "lucia/middleware";
-import { prisma as prismaAdapter } from "@lucia-auth/adapter-prisma";
+import { DrizzleSQLiteAdapter } from "@lucia-auth/adapter-drizzle";
+import { Lucia } from "lucia";
 import { db } from "../db";
+import { session, user } from "../schema";
 
-export const auth = lucia({
-  adapter: prismaAdapter(db),
-  env: process.env.NODE_ENV === "development" ? "DEV" : "PROD",
-  middleware: nextjs_future(),
+const adapter = new DrizzleSQLiteAdapter(db, session, user);
 
+export const auth = new Lucia(adapter, {
   sessionCookie: {
     expires: false,
+    attributes: {
+      secure: process.env.NODE_ENV === "production",
+    },
+  },
+  getUserAttributes: (attributes) => {
+    return {
+      // attributes has the type of DatabaseUserAttributes
+      username: attributes.username,
+    };
   },
 });
 
-export type Auth = typeof auth;
+declare module "lucia" {
+  interface Register {
+    Lucia: typeof auth;
+    DatabaseUserAttributes: DatabaseUserAttributes;
+  }
+}
+
+interface DatabaseUserAttributes {
+  username: string;
+}
