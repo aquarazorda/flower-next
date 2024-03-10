@@ -3,7 +3,7 @@ CREATE TABLE `blockedDate` (
 	`createdAt` integer DEFAULT CURRENT_TIMESTAMP,
 	`updatedAt` integer DEFAULT CURRENT_TIMESTAMP,
 	`dates` text,
-	`roomId` integer,
+	`roomId` integer NOT NULL,
 	FOREIGN KEY (`roomId`) REFERENCES `room`(`roomId`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -17,7 +17,7 @@ CREATE TABLE `price` (
 );
 --> statement-breakpoint
 CREATE TABLE `reservation` (
-	`id` text,
+	`id` text NOT NULL,
 	`email` text(200),
 	`phoneNumber` text(20),
 	`firstName` text(200),
@@ -25,23 +25,23 @@ CREATE TABLE `reservation` (
 	`status` text,
 	`price` integer DEFAULT 0,
 	`roomId` integer,
-	`dateFrom` integer,
-	`dateTo` integer,
+	`dateFrom` integer NOT NULL,
+	`dateTo` integer NOT NULL,
 	`error` text(2000),
 	`type` text,
 	`paymentId` text(200),
 	`confirmationSent` integer DEFAULT false,
-	`createdAt` integer DEFAULT CURRENT_TIMESTAMP,
-	`updatedAt` integer DEFAULT CURRENT_TIMESTAMP,
+	`createdAt` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`updatedAt` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	FOREIGN KEY (`roomId`) REFERENCES `room`(`roomId`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `room` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`roomId` integer,
+	`roomId` integer NOT NULL,
 	`createdAt` integer DEFAULT CURRENT_TIMESTAMP,
 	`updatedAt` integer DEFAULT CURRENT_TIMESTAMP,
-	`name` text,
+	`name` text NOT NULL,
 	`order` integer DEFAULT 0,
 	`type` text
 );
@@ -51,11 +51,11 @@ CREATE TABLE `roomInfo` (
 	`msId` integer,
 	`createdAt` integer DEFAULT CURRENT_TIMESTAMP,
 	`updatedAt` integer DEFAULT CURRENT_TIMESTAMP,
-	`roomId` integer,
+	`roomId` integer NOT NULL,
 	`description` text(2000),
 	`pictures` text,
 	`persons` integer DEFAULT 3,
-	`extraPerson` integer DEFAULT true,
+	`extraPerson` integer DEFAULT true NOT NULL,
 	FOREIGN KEY (`roomId`) REFERENCES `room`(`roomId`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -90,7 +90,8 @@ CREATE TABLE `verifiedEmail` (
 	`email` text(200),
 	`status` text,
 	`createdAt` integer DEFAULT CURRENT_TIMESTAMP,
-	`updatedAt` integer DEFAULT CURRENT_TIMESTAMP
+	`updatedAt` integer DEFAULT CURRENT_TIMESTAMP,
+	`verificationCode` text(200)
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `blockedDate_roomId_unique` ON `blockedDate` (`roomId`);--> statement-breakpoint

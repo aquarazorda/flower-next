@@ -31,6 +31,9 @@ export default async function login(data: FormData) {
     return Err("Incorrect username or password");
   }
 
+  const hashedPassword = await new Argon2id().hash(password);
+  console.log(hashedPassword);
+
   const validPassword = await new Argon2id().verify(
     existingUser.hashed_password,
     password,

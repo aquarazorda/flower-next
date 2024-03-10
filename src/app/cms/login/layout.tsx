@@ -2,8 +2,7 @@ import "~/app/_styles/globals.css";
 
 import { cookies } from "next/headers";
 import { TRPCReactProvider } from "~/trpc/react";
-import { auth } from "~/server/auth/lucia";
-import * as context from "next/headers";
+import { auth, validateRequest } from "~/server/auth/lucia";
 import { redirect } from "next/navigation";
 
 export default async function RootLayout({
@@ -11,10 +10,9 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const authRequest = auth.handleRequest("GET", context);
-  const session = await authRequest.validate();
+  const { user } = await validateRequest();
 
-  if (session) {
+  if (user) {
     redirect("/cms");
   }
 
