@@ -8,6 +8,7 @@ import { db } from "~/server/db";
 import { price, roomInfo } from "~/server/schema";
 
 export const onPriceSave = async (roomId: number, values: FormData) => {
+  console.log(roomId);
   const schema = zfd.formData(
     z.record(
       zfd.text(),
@@ -18,16 +19,28 @@ export const onPriceSave = async (roomId: number, values: FormData) => {
   const data = schema.safeParse(values);
 
   if (data.success) {
-    await db
-      .update(price)
-      .set({
-        list: data.data,
-        updatedAt: new Date(),
-      })
-      .where(eq(price.roomId, roomId));
-  }
+    try {
+      await db
+        .insert(price)
+        .values({
+          list: data.data,
+          roomId,
+        })
+        .onConflictDoUpdate({
+          target: price.roomId,
+          set: {
+            list: data.data,
+            updatedAt: new Date(),
+          },
+        });
 
-  revalidatePath(`/cms/cms/room/${roomId}`);
+      revalidatePath(`/cms/room/${roomId}`);
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  }
 };
 
 export const onImageSave = async (roomId: number, values: string[]) => {

@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "2ae2e12e-14d2-4b0c-b0ec-ac77cd7e9162",
+  "id": "d02f3053-6d32-41e2-a32a-6ef3aab5c6f5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "blockedDate": {
@@ -109,7 +109,7 @@
           "name": "roomId",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         }
       },
@@ -197,7 +197,7 @@
           "name": "roomId",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "dateFrom": {
@@ -260,15 +260,7 @@
           "default": "CURRENT_TIMESTAMP"
         }
       },
-      "indexes": {
-        "reservationRoomIdIdx": {
-          "name": "reservationRoomIdIdx",
-          "columns": [
-            "roomId"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "reservation_roomId_room_roomId_fk": {
           "name": "reservation_roomId_room_roomId_fk",
@@ -542,7 +534,7 @@
           "name": "roomId",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "status": {
@@ -581,15 +573,7 @@
           "autoincrement": false
         }
       },
-      "indexes": {
-        "transaction_roomId_unique": {
-          "name": "transaction_roomId_unique",
-          "columns": [
-            "roomId"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "transaction_roomId_room_roomId_fk": {
           "name": "transaction_roomId_room_roomId_fk",

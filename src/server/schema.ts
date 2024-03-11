@@ -96,7 +96,8 @@ export const price = sqliteTable("price", {
   list: text("list", { mode: "json" }).$type<Record<string, number>>(),
   roomId: integer("roomId", { mode: "number" })
     .unique()
-    .references(() => room.roomId),
+    .references(() => room.roomId)
+    .notNull(),
 });
 
 export const priceRelations = relations(price, ({ one }) => ({
@@ -115,8 +116,8 @@ export const transaction = sqliteTable("transaction", {
     sql`CURRENT_TIMESTAMP`,
   ),
   roomId: integer("roomId", { mode: "number" })
-    .unique()
-    .references(() => room.roomId),
+    .references(() => room.roomId)
+    .notNull(),
   status: text("status", { enum: ["PAID", "PENDING", "FAILED", "REFUNDED"] }),
   dateFrom: integer("dateFrom", { mode: "timestamp" }),
   dateTo: integer("dateTo", { mode: "timestamp" }),
@@ -143,38 +144,34 @@ export const verifiedEmail = sqliteTable(
   }),
 );
 
-export const reservation = sqliteTable(
-  "reservation",
-  {
-    id: text("id")
-      .$defaultFn(() => createId())
-      .notNull(),
-    email: text("email", { mode: "text", length: 200 }),
-    phoneNumber: text("phoneNumber", { mode: "text", length: 20 }),
-    firstName: text("firstName", { mode: "text", length: 200 }),
-    lastName: text("lastName", { mode: "text", length: 200 }),
-    status: text("status", { enum: ["PENDING", "CONFIRMED", "CANCELLED"] }),
-    price: integer("price", { mode: "number" }).default(0),
-    roomId: integer("roomId", { mode: "number" }).references(() => room.roomId),
-    dateFrom: integer("dateFrom", { mode: "timestamp" }).notNull(),
-    dateTo: integer("dateTo", { mode: "timestamp" }).notNull(),
-    error: text("error", { mode: "text", length: 2000 }),
-    type: text("type", { enum: ["RESERVATION", "PAYMENT"] }),
-    paymentId: text("paymentId", { mode: "text", length: 200 }),
-    confirmationSent: integer("confirmationSent", { mode: "boolean" }).default(
-      false,
-    ),
-    createdAt: integer("createdAt", { mode: "timestamp" })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: integer("updatedAt", { mode: "timestamp" })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-  },
-  (table) => ({
-    reservationRoomIdIdx: uniqueIndex("reservationRoomIdIdx").on(table.roomId),
-  }),
-);
+export const reservation = sqliteTable("reservation", {
+  id: text("id")
+    .$defaultFn(() => createId())
+    .notNull(),
+  email: text("email", { mode: "text", length: 200 }),
+  phoneNumber: text("phoneNumber", { mode: "text", length: 20 }),
+  firstName: text("firstName", { mode: "text", length: 200 }),
+  lastName: text("lastName", { mode: "text", length: 200 }),
+  status: text("status", { enum: ["PENDING", "CONFIRMED", "CANCELLED"] }),
+  price: integer("price", { mode: "number" }).default(0),
+  roomId: integer("roomId", { mode: "number" })
+    .references(() => room.roomId)
+    .notNull(),
+  dateFrom: integer("dateFrom", { mode: "timestamp" }).notNull(),
+  dateTo: integer("dateTo", { mode: "timestamp" }).notNull(),
+  error: text("error", { mode: "text", length: 2000 }),
+  type: text("type", { enum: ["RESERVATION", "PAYMENT"] }),
+  paymentId: text("paymentId", { mode: "text", length: 200 }),
+  confirmationSent: integer("confirmationSent", { mode: "boolean" }).default(
+    false,
+  ),
+  createdAt: integer("createdAt", { mode: "timestamp" })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: integer("updatedAt", { mode: "timestamp" })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
 
 export const reservationRelations = relations(reservation, ({ one }) => ({
   room: one(room, {

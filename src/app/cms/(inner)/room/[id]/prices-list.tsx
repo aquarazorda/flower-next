@@ -17,6 +17,7 @@ import { getDateAsStringPrice, getNextMonth } from "~/app/_lib/utils";
 import { RouterOutputs } from "~/trpc/shared";
 import { onPriceSave } from "./actions";
 import { redirect } from "next/navigation";
+import { useToast } from "~/app/_components/ui/use-toast";
 
 type Props = {
   room: RouterOutputs["room"]["getRoom"];
@@ -26,6 +27,8 @@ export default function RoomPriceListPage({ room }: Props) {
   if (!room) {
     redirect("/cms/room");
   }
+
+  const { toast } = useToast();
 
   const prices = useMemo(() => {
     const temp = room?.prices?.list as Record<string, number>;
@@ -45,7 +48,14 @@ export default function RoomPriceListPage({ room }: Props) {
     );
   }, [room]);
 
-  const updateWithRoomId = onPriceSave.bind(null, room.roomId);
+  const updateWithRoomId = async (formData: FormData) => {
+    const res = await onPriceSave(room.roomId, formData);
+    if (res) {
+      toast({ description: "Prices updated" });
+    } else {
+      toast({ description: "Error updating prices" });
+    }
+  };
 
   const [data, setData] = useState(
     prices || {

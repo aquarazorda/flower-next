@@ -12,7 +12,7 @@ CREATE TABLE `price` (
 	`createdAt` integer DEFAULT CURRENT_TIMESTAMP,
 	`updatedAt` integer DEFAULT CURRENT_TIMESTAMP,
 	`list` text,
-	`roomId` integer,
+	`roomId` integer NOT NULL,
 	FOREIGN KEY (`roomId`) REFERENCES `room`(`roomId`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -24,7 +24,7 @@ CREATE TABLE `reservation` (
 	`lastName` text(200),
 	`status` text,
 	`price` integer DEFAULT 0,
-	`roomId` integer,
+	`roomId` integer NOT NULL,
 	`dateFrom` integer NOT NULL,
 	`dateTo` integer NOT NULL,
 	`error` text(2000),
@@ -70,7 +70,7 @@ CREATE TABLE `transaction` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`createdAt` integer DEFAULT CURRENT_TIMESTAMP,
 	`updatedAt` integer DEFAULT CURRENT_TIMESTAMP,
-	`roomId` integer,
+	`roomId` integer NOT NULL,
 	`status` text,
 	`dateFrom` integer,
 	`dateTo` integer,
@@ -96,12 +96,10 @@ CREATE TABLE `verifiedEmail` (
 --> statement-breakpoint
 CREATE UNIQUE INDEX `blockedDate_roomId_unique` ON `blockedDate` (`roomId`);--> statement-breakpoint
 CREATE UNIQUE INDEX `price_roomId_unique` ON `price` (`roomId`);--> statement-breakpoint
-CREATE UNIQUE INDEX `reservationRoomIdIdx` ON `reservation` (`roomId`);--> statement-breakpoint
 CREATE UNIQUE INDEX `room_roomId_unique` ON `room` (`roomId`);--> statement-breakpoint
 CREATE UNIQUE INDEX `roomIdIdx` ON `room` (`roomId`);--> statement-breakpoint
 CREATE UNIQUE INDEX `roomInfo_msId_unique` ON `roomInfo` (`msId`);--> statement-breakpoint
 CREATE UNIQUE INDEX `roomInfo_roomId_unique` ON `roomInfo` (`roomId`);--> statement-breakpoint
-CREATE UNIQUE INDEX `transaction_roomId_unique` ON `transaction` (`roomId`);--> statement-breakpoint
 CREATE UNIQUE INDEX `user_username_unique` ON `user` (`username`);--> statement-breakpoint
 CREATE UNIQUE INDEX `verifiedEmail_email_unique` ON `verifiedEmail` (`email`);--> statement-breakpoint
 CREATE UNIQUE INDEX `verifiedEmailIdx` ON `verifiedEmail` (`email`);
