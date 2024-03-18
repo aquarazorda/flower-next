@@ -12,12 +12,12 @@ export const room = sqliteTable(
   {
     id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
     roomId: integer("roomId", { mode: "number" }).unique().notNull(),
-    createdAt: integer("createdAt", { mode: "timestamp" }).default(
-      sql`CURRENT_TIMESTAMP`,
-    ),
-    updatedAt: integer("updatedAt", { mode: "timestamp" }).default(
-      sql`CURRENT_TIMESTAMP`,
-    ),
+    createdAt: text("createdAt")
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`)
+      .notNull(),
+    updatedAt: text("updatedAt")
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`)
+      .notNull(),
     name: text("name").notNull(),
     order: integer("order").default(0),
     type: text("type"),
@@ -36,12 +36,12 @@ export const roomRelations = relations(room, ({ one }) => ({
 export const roomInfo = sqliteTable("roomInfo", {
   id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
   msId: integer("msId", { mode: "number" }).unique(),
-  createdAt: integer("createdAt", { mode: "timestamp" }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-  updatedAt: integer("updatedAt", { mode: "timestamp" }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
+  createdAt: text("createdAt")
+    .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`)
+    .notNull(),
+  updatedAt: text("updatedAt")
+    .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`)
+    .notNull(),
   roomId: integer("roomId", { mode: "number" })
     .unique()
     .references(() => room.roomId)
@@ -63,12 +63,12 @@ export const roomInfoRelations = relations(roomInfo, ({ one }) => ({
 
 export const blockedDate = sqliteTable("blockedDate", {
   id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-  createdAt: integer("createdAt", { mode: "timestamp" }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-  updatedAt: integer("updatedAt", { mode: "timestamp" }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
+  createdAt: text("createdAt")
+    .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`)
+    .notNull(),
+  updatedAt: text("updatedAt")
+    .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`)
+    .notNull(),
   dates: text("dates", { mode: "json" }).$type<
     { from: string; to: string }[]
   >(),
@@ -87,12 +87,12 @@ export const blockedDateRelations = relations(blockedDate, ({ one }) => ({
 
 export const price = sqliteTable("price", {
   id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-  createdAt: integer("createdAt", { mode: "timestamp" }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-  updatedAt: integer("updatedAt", { mode: "timestamp" }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
+  createdAt: text("createdAt")
+    .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`)
+    .notNull(),
+  updatedAt: text("updatedAt")
+    .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`)
+    .notNull(),
   list: text("list", { mode: "json" }).$type<Record<string, number>>(),
   roomId: integer("roomId", { mode: "number" })
     .unique()
@@ -109,12 +109,12 @@ export const priceRelations = relations(price, ({ one }) => ({
 
 export const transaction = sqliteTable("transaction", {
   id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-  createdAt: integer("createdAt", { mode: "timestamp" }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-  updatedAt: integer("updatedAt", { mode: "timestamp" }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
+  createdAt: text("createdAt")
+    .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`)
+    .notNull(),
+  updatedAt: text("updatedAt")
+    .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`)
+    .notNull(),
   roomId: integer("roomId", { mode: "number" })
     .references(() => room.roomId)
     .notNull(),
@@ -131,12 +131,12 @@ export const verifiedEmail = sqliteTable(
     id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
     email: text("email", { mode: "text", length: 200 }).unique(),
     status: text("status", { enum: ["SUCCESS", "PENDING", "FAILED"] }),
-    createdAt: integer("createdAt", { mode: "timestamp" }).default(
-      sql`CURRENT_TIMESTAMP`,
-    ),
-    updatedAt: integer("updatedAt", { mode: "timestamp" }).default(
-      sql`CURRENT_TIMESTAMP`,
-    ),
+    createdAt: text("createdAt")
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`)
+      .notNull(),
+    updatedAt: text("updatedAt")
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`)
+      .notNull(),
     verificationCode: text("verificationCode", { mode: "text", length: 200 }),
   },
   (table) => ({
@@ -165,11 +165,11 @@ export const reservation = sqliteTable("reservation", {
   confirmationSent: integer("confirmationSent", { mode: "boolean" }).default(
     false,
   ),
-  createdAt: integer("createdAt", { mode: "timestamp" })
-    .default(sql`CURRENT_TIMESTAMP`)
+  createdAt: text("createdAt")
+    .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`)
     .notNull(),
-  updatedAt: integer("updatedAt", { mode: "timestamp" })
-    .default(sql`CURRENT_TIMESTAMP`)
+  updatedAt: text("updatedAt")
+    .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`)
     .notNull(),
 });
 

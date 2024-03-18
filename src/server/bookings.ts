@@ -89,6 +89,7 @@ export async function createBooking(
           phoneNumber: data.phone,
           dateFrom: range.from,
           dateTo: range.to,
+          status: "PENDING",
           roomId: Number(roomId),
         })
         .returning({ id: reservation.id });
@@ -142,6 +143,7 @@ export async function createBooking(
       .set({
         type: data.type === "pay" ? "PAYMENT" : "RESERVATION",
         price: validationResult.val.price,
+        status: "CONFIRMED",
         error: null,
       })
       .where(eq(reservation.id, reservationId));
@@ -179,8 +181,12 @@ export async function createBooking(
         },
       });
 
-      sendTelegramMessage(`Reservation confirmed, reservation id - ${reservationId}, otelms booking id - ${res.val}
-      <br /> ${data.firstName} ${data.lastName} booked ${roomId} from ${format(range.from, "yyyy-MM-dd")} to ${format(range.to, "yyyy-MM-dd")} for ${validationResult.val.price} GEL`);
+      sendTelegramMessage(
+        `Reservation confirmed, reservation id - ${reservationId}, otelms booking id - ${res.val}`,
+      );
+      sendTelegramMessage(
+        `${data.firstName} ${data.lastName} booked ${roomId} from ${format(range.from, "yyyy-MM-dd")} to ${format(range.to, "yyyy-MM-dd")} for ${validationResult.val.price} GEL`,
+      );
     }
 
     redirect("/reservation/success/" + reservationId);
@@ -274,6 +280,7 @@ const saveError = async (id: string, error: BookingError) => {
   await db
     .update(reservation)
     .set({
+      status: "CANCELLED",
       error: error.toString(),
     })
     .where(eq(reservation.id, id));
