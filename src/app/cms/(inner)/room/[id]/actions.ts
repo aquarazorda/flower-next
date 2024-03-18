@@ -1,6 +1,6 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
@@ -30,7 +30,7 @@ export const onPriceSave = async (roomId: number, values: FormData) => {
           target: price.roomId,
           set: {
             list: data.data,
-            updatedAt: new Date(),
+            updatedAt: sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`,
           },
         });
 

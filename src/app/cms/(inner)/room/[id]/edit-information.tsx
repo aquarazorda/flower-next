@@ -10,7 +10,7 @@ import { revalidatePath } from "next/cache";
 import { db } from "~/server/db";
 import { redirect } from "next/navigation";
 import { roomInfo } from "~/server/schema";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 type Props = {
   room: RouterOutputs["room"]["getRoom"];
@@ -37,7 +37,7 @@ export default function EditRoomInformation({ room }: Props) {
         .update(roomInfo)
         .set({
           ...data.data,
-          updatedAt: new Date(),
+          updatedAt: sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`,
         })
         .where(eq(roomInfo.id, room.id));
     }
