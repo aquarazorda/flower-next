@@ -55,8 +55,8 @@ export default async function RoomItemPage({ params }: Props) {
         roomId={room.roomId}
         name={room.name}
       />
-      <div className="flex flex-col text-sm lg:my-auto lg:h-full lg:flex-1 lg:flex-row lg:justify-around lg:gap-6 lg:px-8 lg:text-base">
-        <div className="px-8 font-shippori lg:flex lg:flex-col">
+      <div className="flex flex-col text-sm lg:my-auto lg:h-full lg:flex-1 lg:flex-row lg:justify-around lg:gap-6 lg:px-2 lg:text-base xl:px-8">
+        <div className="px-8 font-shippori lg:flex lg:flex-col lg:px-0 xl:px-8">
           <h2 className="text-base text-secondaryHover md:text-xl">
             {room.name}
           </h2>
@@ -105,7 +105,11 @@ export default async function RoomItemPage({ params }: Props) {
         </div>
         <Suspense>
           {!!room.prices && (
-            <div className={"flex w-full font-inter lg:items-start lg:pr-6"}>
+            <div
+              className={
+                "flex w-full font-inter lg:items-start lg:pr-0 xl:pr-6"
+              }
+            >
               <BookingCalendar
                 pricesList={room?.prices.list ?? undefined}
                 blockedDatesString={room?.blockedDate?.dates ?? undefined}
