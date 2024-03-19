@@ -54,7 +54,6 @@ export default function SuitesCarousel({ suites }: Props) {
                   key={room.id}
                   href={"/book/" + room.roomId}
                   prefetch={false}
-                  key={room.roomId}
                   className="embla__slide"
                   style={{ flex: "0 0 100%" }}
                 >
