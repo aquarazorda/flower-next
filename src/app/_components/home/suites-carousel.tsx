@@ -39,42 +39,37 @@ export default function SuitesCarousel({ suites }: Props) {
 
   return (
     <motion.div
-      className="flex flex-col lg:mt-28 lg:px-32 lg:pl-20"
+      className="flex flex-col lg:mt-28 lg:px-32 lg:pl-24"
       {...animationProps}
     >
       <h5 className="mb-8 text-center font-shippori text-base font-medium text-neutral-500 lg:hidden lg:text-primary/90">
         Suites
       </h5>
       <div className="flex flex-col lg:flex-row">
-        <div className="embla lg:w-1/2">
-          <div ref={emblaRef} className="overflow-hidden">
-            <div className="embla__container flex aspect-video cursor-pointer overflow-hidden lg:aspect-square lg:flex-col">
-              {suites.map((room, idx) => (
-                <Link
-                  key={room.id}
-                  href={"/book/" + room.roomId}
-                  prefetch={false}
-                  className="embla__slide"
-                  style={{ flex: "0 0 100%" }}
-                >
-                  {currSlideIndex === idx ||
-                  currSlideIndex - 1 === idx ||
-                  currSlideIndex + 1 === idx ? (
-                    <Image
-                      alt={room.name}
-                      fill={true}
-                      onClick={() => router.push("/suites/" + room.roomId)}
-                      src={`/images/rooms/${
-                        // @ts-ignore
-                        room.info?.pictures?.[0] || 0
-                      }`}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="block h-full w-full object-cover lg:rounded-md"
-                    />
-                  ) : null}
-                </Link>
-              ))}
-            </div>
+        <div
+          ref={emblaRef}
+          className="embla relative aspect-video overflow-hidden lg:aspect-square lg:w-1/2"
+        >
+          <div className="embla__container flex h-full w-full cursor-pointer lg:flex-col">
+            {suites.map((room, idx) => (
+              <Link
+                key={room.id}
+                href={"/book/" + room.roomId}
+                prefetch={false}
+                className="embla__slide relative"
+                style={{ flex: "0 0 100%" }}
+              >
+                <Image
+                  alt={room.name}
+                  fill={true}
+                  onClick={() => router.push("/suites/" + room.roomId)}
+                  src={`/images/rooms/${room.info?.pictures?.[idx] || 0}`}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="flex h-full w-full object-cover lg:rounded-md"
+                />
+                )
+              </Link>
+            ))}
           </div>
         </div>
         <div className="mt-5 flex flex-1 flex-col gap-6 px-4 lg:mt-0 lg:w-1/2 lg:flex-row lg:px-0">

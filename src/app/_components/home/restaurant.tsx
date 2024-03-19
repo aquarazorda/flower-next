@@ -12,7 +12,7 @@ export default function Restaurant() {
       <h5 className="mb-8 text-center text-base font-medium text-primary lg:mb-16 lg:text-2xl lg:font-normal">
         Restaurant
       </h5>
-      <div className="relative h-28 w-full lg:m-auto lg:h-60 lg:px-32">
+      <div className="relative h-28 w-full lg:m-auto lg:h-60 lg:px-24">
         <Image
           src="/images/home/restaurant-desktop.webp"
           alt="Restaurant banner"

@@ -25,7 +25,7 @@ export default function RoomsCarousel({ rooms }: Props) {
       </h5>
       <div
         ref={emblaRef}
-        className="embla cursor-pointer overflow-hidden pl-4 lg:pl-4"
+        className="embla cursor-pointer overflow-hidden pl-4 lg:pl-0"
       >
         <motion.div
           variants={{
@@ -41,7 +41,7 @@ export default function RoomsCarousel({ rooms }: Props) {
           }}
           initial="hidden"
           animate="show"
-          className="embla__container flex lg:ml-28"
+          className="embla__container flex lg:ml-24"
         >
           {rooms.map((room, idx) => (
             <motion.div
