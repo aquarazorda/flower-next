@@ -43,15 +43,18 @@ export default function SuitesCarousel({ suites }: Props) {
         Suites
       </h5>
       <div className="flex flex-col lg:flex-row">
-        <div ref={emblaRef} className="embla overflow-hidden lg:w-1/2">
-          <div className="embla__container relative flex h-64 w-full cursor-pointer lg:h-[70vh] lg:flex-col">
+        <div
+          ref={emblaRef}
+          className="embla h-64 overflow-hidden lg:h-[70vh] lg:w-1/2"
+        >
+          <div className="embla__container relative flex h-full w-full cursor-pointer lg:flex-col">
             {suites.map((room, idx) => (
               <Link
                 href={"/book/" + room.roomId}
                 prefetch={false}
-                className="embla__slide relative block w-full"
-                style={{ flex: "0 0 100%" }}
+                className="embla__slide relative block h-full w-full"
                 key={room.roomId}
+                style={{ flex: "0 0 100%" }}
               >
                 {currSlideIndex === idx ||
                 currSlideIndex - 1 === idx ||
