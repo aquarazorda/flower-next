@@ -1,19 +1,46 @@
+"use client";
+
 import { RouterOutputs } from "~/trpc/shared";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 type Props = {
   rooms: RouterOutputs["room"]["get"];
 };
 
 export default function RoomsList({ rooms }: Props) {
-  console.log(rooms.map(({ info }) => info?.pictures));
   return (
     <div className={"font-inter lg:mb-24 lg:px-[5%]"}>
       {/* <RoomsFilter /> */}
-      <main className="my-10 flex flex-wrap justify-center gap-10 px-7 lg:grid lg:grid-cols-5 lg:gap-6">
+      <motion.main
+        variants={{
+          hidden: {
+            opacity: 0,
+          },
+          show: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.08,
+            },
+          },
+        }}
+        initial="hidden"
+        animate="show"
+        className="my-3 flex flex-wrap justify-center gap-10 px-7 lg:my-10 lg:grid lg:grid-cols-5 lg:gap-6"
+      >
         {rooms.map((room) => (
-          <article className="flex flex-col">
+          <motion.article
+            transition={{ duration: 0.2 }}
+            variants={{
+              hidden: {
+                opacity: 0,
+              },
+              show: { opacity: 1 },
+            }}
+            className="flex flex-col"
+            key={room.id}
+          >
             <Link
               prefetch={false}
               href={`/book/${room.roomId}`}
@@ -59,9 +86,9 @@ export default function RoomsList({ rooms }: Props) {
                     Check Price
                   </button> */}
             </div>
-          </article>
+          </motion.article>
         ))}
-      </main>
+      </motion.main>
       {/* <Portal>
         <Toast.Region>
           <Toast.List className="fixed bottom-0 right-0 z-50 bg-white p-4" />

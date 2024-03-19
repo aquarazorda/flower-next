@@ -80,7 +80,6 @@ const run = () => {
         if (!item.err) {
           return generateImages(item.val);
         }
-        console.log(item.val);
       });
     });
 };

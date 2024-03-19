@@ -64,6 +64,7 @@ export default function SuitesCarousel({ suites }: Props) {
                       // @ts-ignore
                       room.info?.pictures?.[0] || 0
                     }`}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="block h-full w-full object-cover lg:rounded-md"
                   />
                 ) : null}

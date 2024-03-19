@@ -8,7 +8,6 @@ import { db } from "~/server/db";
 import { price, roomInfo } from "~/server/schema";
 
 export const onPriceSave = async (roomId: number, values: FormData) => {
-  console.log(roomId);
   const schema = zfd.formData(
     z.record(
       zfd.text(),

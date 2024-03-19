@@ -55,16 +55,22 @@ export default function RoomsCarousel({ rooms }: Props) {
               }}
               style={{ aspectRatio: isMobile ? "9.4/10" : "" }}
             >
-              <Link href={"/book/" + room.roomId} prefetch={false}>
+              <Link
+                href={"/book/" + room.roomId}
+                className="relative block h-full"
+                prefetch={false}
+              >
                 {idx < 5 ? (
                   <Image
                     src={`/images/rooms/${
                       // @ts-ignore
                       room.info?.pictures?.[0] || 0
                     }`}
+                    priority={idx < 3}
                     className="rounded-lg object-cover"
                     alt={room.name}
                     fill={true}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                 ) : (
                   <LazyImage

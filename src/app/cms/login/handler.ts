@@ -32,7 +32,6 @@ export default async function login(data: FormData) {
   }
 
   const hashedPassword = await new Argon2id().hash(password);
-  console.log(hashedPassword);
 
   const validPassword = await new Argon2id().verify(
     existingUser.hashed_password,

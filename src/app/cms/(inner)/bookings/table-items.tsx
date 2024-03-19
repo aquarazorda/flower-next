@@ -34,8 +34,6 @@ export const ReservationsTable = async ({ pending }: { pending?: boolean }) => {
       .sort((a, b) => compareDesc(a.createdAt, b.createdAt)),
   );
 
-  console.log(data);
-
   return (
     <div className="flex w-full flex-col gap-4">
       <Table>
